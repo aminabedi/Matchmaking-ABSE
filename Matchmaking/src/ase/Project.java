@@ -5,8 +5,9 @@ import jade.core.AID;
 import java.util.ArrayList;
 
 public class Project {
+	
 	private AID customer;
-    private AID provider;
+    private AID provider = null;
     
     private String name;
     private int progress = 0;
@@ -61,6 +62,10 @@ public class Project {
     public void sendMessageByCustomer(String c) {
     	Message msg = new Message(customer, provider, c);
     	addMessage(msg);
+    }
+    
+    public String toString() {
+    	return "" + customer + ":" + name + ":" + bid + ":" + (provider!=null?provider:"none"); 
     }
     
     public boolean isFinal() {

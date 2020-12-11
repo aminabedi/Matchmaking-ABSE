@@ -1,6 +1,7 @@
 package ase;
 
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -25,9 +26,11 @@ public class ProjectAgent extends EnhancedAgent {
         register("project-register");
         register("project-update");
         register("project-message");
+        register("project-list");
 
         this.addBehaviour(new ProjectRegisterBehaviour());
         this.addBehaviour(new ProjectUpdateBehaviour());
+        this.addBehaviour(new ProjectMessageBehaviour());
     }
 	
 	private class ProjectRegisterBehaviour extends CyclicBehaviour{
@@ -66,7 +69,6 @@ public class ProjectAgent extends EnhancedAgent {
 		
 	}
 	private class ProjectUpdateBehaviour extends CyclicBehaviour{
-		
 		public ProjectUpdateBehaviour() {
 			super(ProjectAgent.this);
 	        myAgent = ProjectAgent.this;
@@ -131,4 +133,37 @@ public class ProjectAgent extends EnhancedAgent {
 		}
 	}
 
+	private class ProjectListBehaviour extends CyclicBehaviour{
+		
+		public ProjectListBehaviour() {
+			super(ProjectAgent.this);
+	        myAgent = ProjectAgent.this;
+		}
+		public void action() {
+			ACLMessage msg, reply;
+	        MessageTemplate template;
+
+            //listening for project MESSAGES
+            template = MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF);
+            
+            msg = myAgent.blockingReceive(template);
+            ArrayList<String> proj_list = new ArrayList<>();
+            if(msg != null) {
+              System.out.println("I, " + getLocalName() + ", received a project list request");
+              AID sender = msg.getSender();
+              for (Iterator<Project> it = projects.iterator(); it.hasNext(); ) {
+                  Project p = it.next();
+                  if (p.getProvider() == sender || p.getCustomer() == sender) {
+                      proj_list.add(p.toString());
+                  }
+              }
+              reply = msg.createReply();
+              msg.setContent(String.join(proj_list, "|"));
+            }
+            
+			
+		}
+	}
+
+	
 }
