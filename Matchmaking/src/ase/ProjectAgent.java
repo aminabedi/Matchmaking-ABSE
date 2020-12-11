@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import jade.core.AID;
 
@@ -147,21 +148,22 @@ public class ProjectAgent extends EnhancedAgent {
             template = MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF);
             
             msg = myAgent.blockingReceive(template);
-            ArrayList<String> proj_list = new ArrayList<>();
+            List<String> projList = new ArrayList<String>();
             if(msg != null) {
               System.out.println("I, " + getLocalName() + ", received a project list request");
               AID sender = msg.getSender();
               for (Iterator<Project> it = projects.iterator(); it.hasNext(); ) {
                   Project p = it.next();
                   if (p.getProvider() == sender || p.getCustomer() == sender) {
-                      proj_list.add(p.toString());
+                      projList.add(p.toString());
                   }
               }
               reply = msg.createReply();
-              msg.setContent(String.join(proj_list, "|"));
-            }
-            
-			
+              String[] projArr = new String[projList.size()];
+              projArr = projList.toArray(projArr);
+              reply.setContent(String.join("|", projArr));
+              myAgent.send(reply);
+            }	
 		}
 	}
 
