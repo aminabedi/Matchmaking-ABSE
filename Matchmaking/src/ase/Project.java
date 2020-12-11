@@ -1,8 +1,7 @@
-package ase;
-
 import jade.lang.acl.ACLMessage;
 import jade.core.AID;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Project {
 	
@@ -10,14 +9,16 @@ public class Project {
     private AID provider = null;
     
     private String name;
+    private String description;
     private int progress = 0;
     private int bid;
     private ArrayList<Message> messages = new ArrayList<>();
 
-    public Project(AID customer, String name, int bid) {
+    public Project(AID customer, String name, String description, int bid) {
     	this.customer = customer;
         this.name = name;
         this.bid = bid;
+        this.description = description;
     }
 
 
@@ -70,6 +71,14 @@ public class Project {
     
     public boolean isFinal() {
         return progress == 100;
+    }
+
+    public int getProgress(){
+        return progress;
+    }
+
+    public List<Message> getMessages(){
+        return messages;
     }
 }
 
