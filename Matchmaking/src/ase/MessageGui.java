@@ -1,3 +1,5 @@
+package ase;
+
 import jade.core.AID;
 
 import javax.swing.*;
@@ -37,8 +39,8 @@ public class MessageGui {
 
                     Project project = projects.get(list.getSelectedIndex());
                     String allMessages = "";
-                    List<Message> messages = project.getMessages();
-                    for (Message message : messages) {
+                    List<InternalMessage> messages = project.getMessages();
+                    for (InternalMessage message : messages) {
                         allMessages += message.content;
                         allMessages += "\n";
                     }
@@ -88,12 +90,12 @@ public class MessageGui {
     public static void main(String[] args) {
         List<Project> projects = new ArrayList<>();
         Project project1 = new Project(new AID(), "Project 1", "Description 1",10);
-        project1.addMessage(new Message(new AID(), new AID(), "Hi"));
-        project1.addMessage(new Message(new AID(), new AID(), "Hello"));
+        project1.addMessage(new InternalMessage(new AID(), new AID(), "Hi"));
+        project1.addMessage(new InternalMessage(new AID(), new AID(), "Hello"));
 
         Project project2 = new Project(new AID(), "Project 2", "Description 2", 5);
-        project2.addMessage(new Message(new AID(), new AID(), "Are you fine?"));
-        project2.addMessage(new Message(new AID(), new AID(), "YES!"));
+        project2.addMessage(new InternalMessage(new AID(), new AID(), "Are you fine?"));
+        project2.addMessage(new InternalMessage(new AID(), new AID(), "YES!"));
 
         projects.add(project1);
         projects.add(project2);

@@ -1,17 +1,15 @@
 package ase;
 
-import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import jade.core.AID;
-
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-
-import jade.core.behaviours.CyclicBehaviour;
 
 
 public class ProjectAgent extends EnhancedAgent {
@@ -57,7 +55,8 @@ public class ProjectAgent extends EnhancedAgent {
               Project proj = new Project(
             		  msg.getSender(),
             		  contents[0],
-            		  Integer.parseInt(contents[1]));
+            		  contents[1],
+            		  Integer.parseInt(contents[2]));
               projects.add(proj);
               //reply with accepted
               reply = msg.createReply();

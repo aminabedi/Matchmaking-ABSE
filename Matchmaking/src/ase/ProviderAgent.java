@@ -10,23 +10,19 @@ import jade.lang.acl.ACLMessage;
 
 import java.util.Set;
 
-public class ProviderAgent extends Agent {
+public class ProviderAgent extends EnhancedAgent {
     private Set<Project> projects;
     int rating;
+    
+//    public ProviderAgent(User user) {
+//    	
+//    }
 
     @Override
     protected void setup() {
-        DFAgentDescription dfd = new DFAgentDescription();
-        dfd.setName(getAID());
-        ServiceDescription sd = new ServiceDescription();
-        sd.setType("Providing-project");
-        sd.setName("Jade-Matchmaking");
-        dfd.addServices(sd);
-        try {
-            DFService.register(this,dfd);
-        } catch (FIPAException fe) {
-            fe.printStackTrace();
-        }
+    	System.out.println("SETTING UP A PROVIDER AGENT");
+        register("project-provide");
+        addBehaviour(new RecieveMessage());
     }
 
     @Override
@@ -34,7 +30,7 @@ public class ProviderAgent extends Agent {
         System.out.println("CustomerAgent " + getAID().getName() + " terminated!");
     }
 
-    public static class RecieveMessage extends CyclicBehaviour {
+    private class RecieveMessage extends CyclicBehaviour {
 
         @Override
         public void action() {

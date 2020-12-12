@@ -1,3 +1,5 @@
+package ase;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,12 +7,12 @@ import java.awt.event.ActionListener;
 
 public class UserGui {
 
-    UserManagersAgent userManagersAgent;
+    UserManagerAgent userManagersAgent;
     JFrame jFrame;
 
-    public UserGui(UserManagersAgent userManagersAgent) {
+    public UserGui(UserManagerAgent userManagerAgent) {
         this.jFrame = new JFrame();
-        this.userManagersAgent = userManagersAgent;
+        this.userManagersAgent = userManagerAgent;
         this.jFrame.setSize(400, 400);
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new FlowLayout());

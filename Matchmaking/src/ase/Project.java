@@ -16,7 +16,7 @@ public class Project {
     private String description;
     private int progress = 0;
     private int bid;
-    private ArrayList<Message> messages = new ArrayList<>();
+    private ArrayList<InternalMessage> messages = new ArrayList<>();
 
     public Project(AID customer, String name, String description, int bid) {
     	this.customer = customer;
@@ -30,7 +30,7 @@ public class Project {
         this.name = newName;
     }
     
-    public void addMessage(Message msg) {
+    public void addMessage(InternalMessage msg) {
     	messages.add(msg);
     }
 
@@ -60,12 +60,12 @@ public class Project {
     }
     
     public void sendMessageByProvider(String c) {
-    	Message msg = new Message(provider, customer, c);
+    	InternalMessage msg = new InternalMessage(provider, customer, c);
     	addMessage(msg);
     }
 
     public void sendMessageByCustomer(String c) {
-    	Message msg = new Message(customer, provider, c);
+    	InternalMessage msg = new InternalMessage(customer, provider, c);
     	addMessage(msg);
     }
     
@@ -81,7 +81,7 @@ public class Project {
         return progress;
     }
 
-    public List<Message> getMessages(){
+    public List<InternalMessage> getMessages(){
         return messages;
     }
 }

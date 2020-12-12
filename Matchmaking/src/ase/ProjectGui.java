@@ -1,3 +1,5 @@
+package ase;
+
 import jade.core.AID;
 
 import javax.swing.*;

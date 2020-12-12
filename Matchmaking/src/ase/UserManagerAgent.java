@@ -1,15 +1,18 @@
+package ase;
+
 import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserManagersAgent extends EnhancedAgent {
+public class UserManagerAgent extends EnhancedAgent {
 
     UserGui userGui;
     List<User> users = new ArrayList<>();
     User currentUser;
 
-    public UserManagersAgent() {
+    public UserManagerAgent() {
         addMockUsers();
     }
 
@@ -28,6 +31,11 @@ public class UserManagersAgent extends EnhancedAgent {
         System.out.println("UserManagers-agent " + getAID().getName() + "is ready.");
         userGui = new UserGui(this);
         userGui.showGui();
+        addBehaviour(new TickerBehaviour (this, Long.valueOf(10000)) {
+        	protected void onTick() {
+        		System.out.println("UserManagers-agent " + getAID().getName() + "is cycling.");
+        	}
+        });
     }
 
     @Override
@@ -37,18 +45,26 @@ public class UserManagersAgent extends EnhancedAgent {
     }
 
     public void login(String userName, String password, String role) {
-        addBehaviour(new OneShotBehaviour() {
-            @Override
-            public void action() {
+//        addBehaviour(new OneShotBehaviour() {
+//            @Override
+//            public void action() {
                 for (User user : users) {
                     if (user.getUsername().equals(userName) && user.getPassword().equals(password)) {
-                        System.out.println("Login Successfully");
-                        currentUser = user;
+                        System.out.println("Login Successfully " + user.getRole()+ ":" + User.PROVIDER);
+                        switch(user.getRole()) {
+                        case User.CUSTOMER:
+                        	System.out.println("Launching1 " + user.getRole());
+                        	new CustomerAgent();
+                        case User.PROVIDER:
+                        	System.out.println("Launching2 " + User.PROVIDER);
+                        	createAgent(user.getUsername(), "ase.ProviderAgent");
+                        }
                         return;
                     }
                 }
                 userGui.showWrongCredential();
-            }
-        });
+//            }
+//        });
     }
+    
 }

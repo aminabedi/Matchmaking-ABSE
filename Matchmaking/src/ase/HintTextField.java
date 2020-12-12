@@ -1,3 +1,4 @@
+package ase;
 import javax.swing.*;
 import java.awt.*;
 

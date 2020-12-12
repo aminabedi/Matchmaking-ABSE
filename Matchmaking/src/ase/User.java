@@ -1,3 +1,5 @@
+package ase;
+
 import java.io.Serializable;
 
 public class User{
@@ -6,8 +8,8 @@ public class User{
     private String password;
     private String role;
 
-    public static String PROVIDER = "provider";
-    public static String CUSTOMER = "customer";
+    public static final String PROVIDER = "provider";
+    public static final String CUSTOMER = "customer";
 
     User(String username, String password, String role){
         this.username = username;
