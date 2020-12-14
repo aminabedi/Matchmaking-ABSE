@@ -53,11 +53,10 @@ public class UserManagerAgent extends EnhancedAgent {
                         System.out.println("Login Successfully " + user.getRole()+ ":" + User.PROVIDER);
                         switch(user.getRole()) {
                         case User.CUSTOMER:
-                        	System.out.println("Launching1 " + user.getRole());
-                        	new CustomerAgent();
+                        	createAgent("Customer:" + user.getUsername(), "ase.CustomerAgent");
+                        	break;
                         case User.PROVIDER:
-                        	System.out.println("Launching2 " + User.PROVIDER);
-                        	createAgent(user.getUsername(), "ase.ProviderAgent");
+                        	createAgent("Provider:" + user.getUsername(), "ase.ProviderAgent");
                         }
                         return;
                     }

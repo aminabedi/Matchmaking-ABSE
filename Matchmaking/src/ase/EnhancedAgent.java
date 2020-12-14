@@ -1,14 +1,18 @@
 package ase;
 
-import jade.domain.FIPAException;
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.SearchConstraints;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-import java.util.Set;
 import java.util.HashSet;
-import jade.core.Agent;
+import java.util.Set;
+
 import jade.core.AID;
+import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.SearchConstraints;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 
@@ -39,6 +43,7 @@ public class EnhancedAgent extends Agent {
 		try { DFService.deregister(this); }
 		catch (Exception ex) {}
 	}
+	
 
 	protected void register(String serviceName) {
 		DFAgentDescription dfd = new DFAgentDescription();

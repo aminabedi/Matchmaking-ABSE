@@ -8,18 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
-	
-	private AID customer;
-    private AID provider = null;
-    
     private String name;
     private String description;
     private int progress = 0;
     private int bid;
-    private ArrayList<InternalMessage> messages = new ArrayList<>();
+   
 
-    public Project(AID customer, String name, String description, int bid) {
-    	this.customer = customer;
+    public Project(String name, String description, int bid) {
         this.name = name;
         this.bid = bid;
         this.description = description;
@@ -30,10 +25,6 @@ public class Project {
         this.name = newName;
     }
     
-    public void addMessage(InternalMessage msg) {
-    	messages.add(msg);
-    }
-
 
     public ACLMessage convertToAclMessage() {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
@@ -47,32 +38,28 @@ public class Project {
         return this.name;
     }
     
-    public void setProvider(AID p) {
-    	this.provider = p;
+    public String getDescription() {
+    	return this.description;
     }
     
-    public AID getProvider() {
-    	return this.provider;
-    }
-    
-    public AID getCustomer() {
-    	return this.customer;
-    }
-    
-    public void sendMessageByProvider(String c) {
-    	InternalMessage msg = new InternalMessage(provider, customer, c);
-    	addMessage(msg);
-    }
-
-    public void sendMessageByCustomer(String c) {
-    	InternalMessage msg = new InternalMessage(customer, provider, c);
-    	addMessage(msg);
-    }
     
     public String toString() {
-    	return "" + customer + ":" + name + ":" + bid + ":" + (provider!=null?provider:"none"); 
+    	return "" + name + ":" + description + ":" + bid; 
     }
     
+    public String getContract() {
+    	return "Contract for project: " + toString();
+    }
+    
+    public String getRejectionMessage(AID sender) {
+    	return sender.getLocalName() + " has rejected " + toString();
+    }
+    
+    public static Project fromString(String s) {
+    	String c[] = s.split(":");
+    	Project p = new Project(c[0], c[1], Integer.parseInt(c[2]));
+    	return p;
+    }
     public boolean isFinal() {
         return progress == 100;
     }
@@ -81,8 +68,5 @@ public class Project {
         return progress;
     }
 
-    public List<InternalMessage> getMessages(){
-        return messages;
-    }
 }
 
