@@ -56,31 +56,7 @@ public class CustomerAgent extends EnhancedAgent {
         message.addReceiver(provider);
         send(message);
     }
-    
-  
 
-    public static class RecieveMessage extends CyclicBehaviour {
 
-        @Override
-        public void action() {
-            ACLMessage msg = myAgent.receive();
-
-            if (msg != null){
-                System.out.println("Received a message");
-                String content = msg.getContent();
-                int performative = msg.getPerformative();
-                if (performative == ACLMessage.ACCEPT_PROPOSAL){
-                    System.out.println("Project has been accepted.");
-                }
-                else if (performative == ACLMessage.REJECT_PROPOSAL){
-                    System.out.println("Project has been rejected.");
-                }
-            }
-            else {
-                block();
-            }
-        }
-
-    }
 
 }

@@ -61,6 +61,7 @@ public class MessageGui {
 	        
 	        jPanelNewMessage.add(newMessage, BorderLayout.CENTER);
 	        jPanelNewMessage.add(jButtonSend, BorderLayout.SOUTH);
+	        myAgent.openProject(selectProject);
         }
         jPanel.add(jPanelNewMessage, BorderLayout.SOUTH);
         jFrame.add(jPanel);
