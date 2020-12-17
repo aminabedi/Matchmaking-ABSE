@@ -1,7 +1,5 @@
 package ase;
 
-import jade.core.Agent;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -45,10 +43,48 @@ public class ProjectDetailGui {
 //                myAgent.sendProposal(project, selectedProvider);
             }
         });
-        jPanel.add(jButtonSend, BorderLayout.SOUTH);
-        //done button
-        //rating
+        JPanel southPanel = new JPanel();
+        southPanel.setLayout(new BorderLayout());
+        southPanel.add(jButtonSend, BorderLayout.NORTH);
+        JButton doneButton = new JButton("Done");
+        southPanel.add(doneButton, BorderLayout.SOUTH);
+        jPanel.add(southPanel, BorderLayout.SOUTH);
+        doneButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showDialog();
+            }
+        });
         this.jFrame.add(jPanel);
+    }
+
+    private void showDialog() {
+        JFrame frame = new JFrame();
+        JPanel panel = new JPanel();
+        frame.setSize(400, 400);
+        HintTextField ratingTextField = new HintTextField("Rating");
+        ratingTextField.setPreferredSize(new Dimension(200, 24));
+
+        HintTextField commentTextField = new HintTextField("Comment");
+        commentTextField.setPreferredSize(new Dimension(200, 24));
+
+        JButton jButton = new JButton("Done");
+
+        jButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                System.out.println("Done" + ratingTextField.getText() + commentTextField.getText());
+            }
+        });
+
+        panel.add(ratingTextField);
+        panel.add(commentTextField);
+        panel.add(jButton);
+        frame.getContentPane().add(panel);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     ProjectDetailGui(ProviderAgent agent, Project project) {
