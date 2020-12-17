@@ -44,6 +44,9 @@ public class MessageGui {
                 	reply.setContent(msg);
                 	reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                     myAgent.send(reply);
+                    String c[] = msg.split(":");
+                    Project project = new Project(c[0], c[1], Integer.parseInt(c[2]), reply.getSender(), myAgent.getAID());
+                    ((ProviderAgent)myAgent).providerGui.addProject(project);
                     dispose();
                 }
             });

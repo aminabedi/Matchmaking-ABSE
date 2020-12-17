@@ -12,6 +12,7 @@ import java.util.Set;
 public class CustomerAgent extends EnhancedAgent {
     List<Project> projects;
     int currentNumber = 0;
+    CustomerGui gui;
 
     @Override
     protected void setup() {
@@ -19,7 +20,7 @@ public class CustomerAgent extends EnhancedAgent {
 //        addSomeMockProjects();
         Set<AID> providers = searchForService("project-provide");
         projects = new ArrayList<>();
-        CustomerGui gui = new CustomerGui(this, providers, projects);
+        gui = new CustomerGui(this, providers, projects);
         gui.showGui();
         addBehaviour(new MessageHandlingBehaviour(this));
         addBehaviour(new CyclicBehaviour() {
@@ -41,6 +42,7 @@ public class CustomerAgent extends EnhancedAgent {
                         reply.setConversationId(Constants.CHAT);
                         reply.addReceiver(msg.getSender());
                         content = project.getContract();
+                        gui.addProject(project);
                     } else {
                         content = project.getRejectionMessage(msg.getSender());
                     }

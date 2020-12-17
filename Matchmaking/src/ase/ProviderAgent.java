@@ -16,7 +16,7 @@ import java.util.Set;
 public class ProviderAgent extends EnhancedAgent {
     private List<Project> projects;
     int rating;
-    
+    ProviderGui providerGui;
 
     @Override
     protected void setup() {
@@ -26,7 +26,7 @@ public class ProviderAgent extends EnhancedAgent {
         register("project-provide");
         addBehaviour(new RecieveProposal());
         addBehaviour(new MessageHandlingBehaviour(this));
-        ProviderGui providerGui = new ProviderGui(this,projects);
+        providerGui = new ProviderGui(this,projects);
         providerGui.showGui();
     }
     

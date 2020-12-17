@@ -17,6 +17,7 @@ public class CustomerGui {
 
     JFrame jFrame;
     AID selectedProvider = null;
+    DefaultListModel<String> providersList;
 
     public CustomerGui(CustomerAgent myAgent, Set<AID> providers, List<Project> projects) {
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
@@ -37,7 +38,7 @@ public class CustomerGui {
         leftPanel.setLayout(new BorderLayout());
         leftPanel.setSize(100, 400);
 
-        DefaultListModel<String> providersList = new DefaultListModel<>();
+        providersList = new DefaultListModel<>();
         for (AID provider : providers) {
             providersList.addElement(provider.getLocalName());
         }
@@ -130,6 +131,10 @@ public class CustomerGui {
 
     public void dispose() {
         this.jFrame.dispose();
+    }
+
+    public void addProject(Project project){
+        providersList.addElement(project.getName());
     }
 
 }

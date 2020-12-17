@@ -59,11 +59,7 @@ public class Project {
     	return sender.getLocalName() + " has rejected " + toString();
     }
     
-//    public static Project fromString(String s) {
-//    	String c[] = s.split(":");
-//    	Project p = new Project(c[0], c[1], Integer.parseInt(c[2]));
-//    	return p;
-//    }
+
     public boolean isFinal() {
         return progress == 100;
     }

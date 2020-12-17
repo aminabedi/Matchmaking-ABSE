@@ -10,6 +10,7 @@ import java.util.List;
 public class ProviderGui {
 
     JFrame jFrame;
+    DefaultListModel<String> projectsListModel;
 
     public ProviderGui(ProviderAgent myAgent, List<Project> projects) {
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
@@ -35,7 +36,7 @@ public class ProviderGui {
         leftPanel.setLayout(new BorderLayout());
         leftPanel.setSize(100, 400);
 
-        DefaultListModel<String> projectsListModel = new DefaultListModel<>();
+        projectsListModel = new DefaultListModel<>();
 
         for (Project project : projects) {
             projectsListModel.addElement(project.getName());
@@ -69,6 +70,10 @@ public class ProviderGui {
 
     public void dispose() {
         this.jFrame.dispose();
+    }
+
+    public void addProject(Project project){
+        projectsListModel.addElement(project.getName());
     }
 
 }
