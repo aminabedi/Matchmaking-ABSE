@@ -11,12 +11,14 @@ import java.util.Set;
 
 public class CustomerAgent extends EnhancedAgent {
     List<Project> projects;
+    int currentNumber = 0;
 
     @Override
     protected void setup() {
         System.out.println("Hello! CustomerAgent " + getAID().getName() + " is here!");
-        addSomeMockProjects();
+//        addSomeMockProjects();
         Set<AID> providers = searchForService("project-provide");
+        projects = new ArrayList<>();
         CustomerGui gui = new CustomerGui(this, providers, projects);
         gui.showGui();
         addBehaviour(new MessageHandlingBehaviour(this));
@@ -32,7 +34,8 @@ public class CustomerAgent extends EnhancedAgent {
 
                 if (msg != null) {
                     String content = null;
-                    Project project = Project.fromString(msg.getContent());
+                    String c[] = msg.getContent().split(":");
+                    Project project = new Project(c[0], c[1], Integer.parseInt(c[2]), msg.getSender(), myAgent.getAID());
                     if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
                         reply = new ACLMessage(ACLMessage.INFORM);
                         reply.setConversationId(Constants.CHAT);
@@ -43,6 +46,7 @@ public class CustomerAgent extends EnhancedAgent {
                     }
                     System.out.println("" + msg.getSender().getLocalName() + " responded to the proposal for " + msg.getContent());
                     MessageGui msgGui = new MessageGui(myAgent, reply, content, false);
+                    // TODO: Instead of this, corresponded projectGUI would be opened.
                 }
             }
         });
@@ -59,10 +63,18 @@ public class CustomerAgent extends EnhancedAgent {
         send(message);
     }
 
-    private void addSomeMockProjects() {
-        projects = new ArrayList<>();
-        projects.add(new Project("Project 1", "Description 1", 10));
-        projects.add(new Project("Project 2", "Description 2", 20));
-        projects.add(new Project("Project 3", "Description 3", 30));
+//    private void addSomeMockProjects() {
+//        projects = new ArrayList<>();
+//        projects.add(new Project("Project 1", "Description 1", 10));
+//        projects.add(new Project("Project 2", "Description 2", 20));
+//        projects.add(new Project("Project 3", "Description 3", 30));
+//    }
+
+    public void sendMessage(AID provider, String p) {
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+
+        message.setContent(p);
+        message.addReceiver(provider);
+        send(message);
     }
 }

@@ -22,7 +22,7 @@ public class ProviderAgent extends EnhancedAgent {
     protected void setup() {
     	System.out.println("SETTING UP A PROVIDER AGENT");
     	projects = new ArrayList<>();
-    	addSomeMockProjects();
+//    	addSomeMockProjects();
         register("project-provide");
         addBehaviour(new RecieveProposal());
         addBehaviour(new MessageHandlingBehaviour(this));
@@ -54,7 +54,7 @@ public class ProviderAgent extends EnhancedAgent {
                 System.out.println("Received a proposal:" + content);
                 reply = msg.createReply();
                 MessageGui msgGui = new MessageGui(myAgent, reply, content, true);
-                
+                // TODO: Instead of this, corresponded projectGUI would be opened.
             }
 //            else {
 //                block();
@@ -63,11 +63,11 @@ public class ProviderAgent extends EnhancedAgent {
 
     }
 
-    private void addSomeMockProjects() {
-        projects = new ArrayList<>();
-        projects.add(new Project("Project 1", "Description 1", 10));
-        projects.add(new Project("Project 2", "Description 2", 20));
-        projects.add(new Project("Project 3", "Description 3", 30));
-    }
+//    private void addSomeMockProjects() {
+//        projects = new ArrayList<>();
+//        projects.add(new Project("Project 1", "Description 1", 10));
+//        projects.add(new Project("Project 2", "Description 2", 20));
+//        projects.add(new Project("Project 3", "Description 3", 30));
+//    }
 
 }

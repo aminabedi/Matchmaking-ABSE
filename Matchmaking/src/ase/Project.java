@@ -12,12 +12,16 @@ public class Project {
     private String description;
     private int progress = 0;
     private int bid;
-   
+    private ArrayList<String> messagesHistory = new ArrayList<>();
+    private AID provider;
+    private AID customer;
 
-    public Project(String name, String description, int bid) {
+    public Project(String name, String description, int bid, AID provider, AID customer) {
         this.name = name;
         this.bid = bid;
         this.description = description;
+        this.provider = provider;
+        this.customer = customer;
     }
 
 
@@ -47,7 +51,7 @@ public class Project {
     	return "" + name + ":" + description + ":" + bid; 
     }
     
-    public String getContract() {
+    public String   getContract() {
     	return "Contract for project: " + toString();
     }
     
@@ -55,11 +59,11 @@ public class Project {
     	return sender.getLocalName() + " has rejected " + toString();
     }
     
-    public static Project fromString(String s) {
-    	String c[] = s.split(":");
-    	Project p = new Project(c[0], c[1], Integer.parseInt(c[2]));
-    	return p;
-    }
+//    public static Project fromString(String s) {
+//    	String c[] = s.split(":");
+//    	Project p = new Project(c[0], c[1], Integer.parseInt(c[2]));
+//    	return p;
+//    }
     public boolean isFinal() {
         return progress == 100;
     }
@@ -68,5 +72,19 @@ public class Project {
         return progress;
     }
 
+    public void progress(int progressPercentage){
+        int permittedProgress = 100 - this.progress;
+        if (progressPercentage < permittedProgress){
+            progress += progressPercentage;
+        }
+    }
+
+    public void chatUpdate(String chatMessage){
+        messagesHistory.add(chatMessage);
+    }
+
+    public AID getProvider() {
+        return provider;
+    }
 }
 

@@ -110,7 +110,7 @@ public class CustomerGui {
                     return;
                 }
                 Project project = new Project(jTextFieldName.getText(), jTextAreaDescription.getText(),
-                        Integer.parseInt(bid.getText()));
+                        Integer.parseInt(bid.getText()), selectedProvider, myAgent.getAID());
                 System.out.println(jTextFieldName.getText() + "  " + project.toString());
                 myAgent.sendProposal(project, selectedProvider);
             }
