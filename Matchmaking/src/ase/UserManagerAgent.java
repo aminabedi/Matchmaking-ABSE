@@ -20,9 +20,9 @@ public class UserManagerAgent extends EnhancedAgent {
         users.add(new User("P2", "2", "provider"));
         users.add(new User("P3", "3", "provider"));
 
-        users.add(new User("C1", "A", "customer"));
-        users.add(new User("C2", "B", "customer"));
-        users.add(new User("C3", "C", "customer"));
+        users.add(new User("C1", "1", "customer"));
+        users.add(new User("C2", "2", "customer"));
+        users.add(new User("C3", "3", "customer"));
     }
 
     public void registerUser(String userName, String password, String role) {

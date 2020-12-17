@@ -28,7 +28,11 @@ public class Project {
     public void setName(String newName) {
         this.name = newName;
     }
-    
+
+
+    public ArrayList<String> getMessagesHistory() {
+        return messagesHistory;
+    }
 
     public ACLMessage convertToAclMessage() {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
@@ -81,6 +85,10 @@ public class Project {
 
     public AID getProvider() {
         return provider;
+    }
+
+    public AID getCustomer() {
+        return customer;
     }
 }
 

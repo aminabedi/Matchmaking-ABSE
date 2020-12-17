@@ -1,22 +1,17 @@
 package ase;
 
-import jade.core.Agent;
+import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class ProviderAgent extends EnhancedAgent {
     private List<Project> projects;
-    int rating;
+    ArrayList<Integer> ratings;
     ProviderGui providerGui;
+    private double rate = 0.0;
 
     @Override
     protected void setup() {
@@ -25,12 +20,20 @@ public class ProviderAgent extends EnhancedAgent {
 //    	addSomeMockProjects();
         register("project-provide");
         addBehaviour(new RecieveProposal());
-        addBehaviour(new MessageHandlingBehaviour(this));
+//        addBehaviour(new MessageHandlingBehaviour(this));
         providerGui = new ProviderGui(this,projects);
         providerGui.showGui();
+
     }
-    
-  
+
+    public void sendMessage(AID provider, String messageText, String projectName) {
+        ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+        message.setConversationId(Constants.CHAT);
+        message.setContent(projectName + ":" + messageText);
+        message.addReceiver(provider);
+        send(message);
+    }
+
 
     private class RecieveProposal extends CyclicBehaviour {
     	
@@ -42,25 +45,56 @@ public class ProviderAgent extends EnhancedAgent {
         @Override
         public void action() {
             ACLMessage msg, reply;
-	        MessageTemplate template;
+//	        MessageTemplate template;
 
             //listening for project proposal
-            template = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
+//            template = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
 
-            msg = myAgent.receive(template);
+            msg = myAgent.receive();
             if (msg != null){
-                System.out.println("Received a proposal");
-                String content = msg.getContent();
-                System.out.println("Received a proposal:" + content);
-                reply = msg.createReply();
-                MessageGui msgGui = new MessageGui(myAgent, reply, content, true);
-                // TODO: Instead of this, corresponded projectGUI would be opened.
+                if (msg.getPerformative() == ACLMessage.PROPOSE){
+                    System.out.println("Received a proposal");
+                    String content = msg.getContent();
+                    System.out.println("Received a proposal:" + content);
+                    reply = msg.createReply();
+                    MessageGui msgGui = new MessageGui(myAgent, reply, content, true);
+                    // TODO: Instead of this, corresponded projectGUI would be opened.
+                }
+                else if (msg.getConversationId() == Constants.CHAT){
+                    String projectName = msg.getContent().split(":")[0];
+                    String chatMessage = msg.getContent().split(":")[1];
+                    for (Project project : projects){
+                        if (project.getName().equals(projectName)){
+                            project.chatUpdate(chatMessage);
+                        }
+                    }
+                }
+                else if (msg.getConversationId() == Constants.RATE)
+                {
+                    int rate = Integer.parseInt(msg.getContent());
+                    ratings.add(rate);
+                    update_rate_and_name();
+
+                }
             }
 //            else {
 //                block();
 //            }
         }
 
+    }
+
+    private void update_rate_and_name() {
+        Integer sum = 0;
+        if(!ratings.isEmpty()) {
+            for (Integer mark : ratings) {
+                sum += mark;
+            }
+            rate = sum.doubleValue() / ratings.size();
+        }
+        rate = sum;
+        getAID().setLocalName(getLocalName().split("\\(")[0] + Double.toString(rate));
+        System.out.println("changed rate");
     }
 
 //    private void addSomeMockProjects() {
