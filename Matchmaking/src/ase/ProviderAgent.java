@@ -9,20 +9,24 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class ProviderAgent extends EnhancedAgent {
-    private Set<Project> projects;
+    private List<Project> projects;
     int rating;
     
 
     @Override
     protected void setup() {
     	System.out.println("SETTING UP A PROVIDER AGENT");
+    	projects = new ArrayList<>();
+    	addSomeMockProjects();
         register("project-provide");
         addBehaviour(new RecieveProposal());
         addBehaviour(new MessageHandlingBehaviour(this));
-        ProviderGui providerGui = new ProviderGui(this);
+        ProviderGui providerGui = new ProviderGui(this,projects);
         providerGui.showGui();
     }
     
@@ -57,6 +61,13 @@ public class ProviderAgent extends EnhancedAgent {
 //            }
         }
 
+    }
+
+    private void addSomeMockProjects() {
+        projects = new ArrayList<>();
+        projects.add(new Project("Project 1", "Description 1", 10));
+        projects.add(new Project("Project 2", "Description 2", 20));
+        projects.add(new Project("Project 3", "Description 3", 30));
     }
 
 }

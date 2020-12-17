@@ -12,6 +12,15 @@ public class UserGui {
 
     public UserGui(UserManagerAgent userManagerAgent) {
         this.jFrame = new JFrame();
+
+        this.jFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                super.windowClosing(windowEvent);
+                userManagerAgent.killAgent(userManagerAgent.getLocalName());
+            }
+        });
+
         this.userManagersAgent = userManagerAgent;
         this.jFrame.setSize(400, 400);
         JPanel jPanel = new JPanel();
@@ -38,6 +47,15 @@ public class UserGui {
             }
         });
 
+        JButton button_register = new JButton("Register");
+        button_register.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                userManagerAgent.registerUser(textField_userName.getText(), textField_password.getText(), comboBox_userType.getSelectedItem().toString());
+                System.out.println("User: "+textField_userName.getText()+" is registered successfully");
+            }
+        });
+
         textField_userName.setPreferredSize(new Dimension(200, 24));
         textField_password.setPreferredSize(new Dimension(200, 24));
 
@@ -45,6 +63,7 @@ public class UserGui {
         jPanel.add(textField_password);
         jPanel.add(comboBox_userType);
         jPanel.add(button_login);
+        jPanel.add(button_register);
 
         this.jFrame.add(jPanel);
     }

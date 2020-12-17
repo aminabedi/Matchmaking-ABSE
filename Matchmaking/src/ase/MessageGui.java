@@ -17,6 +17,15 @@ public class MessageGui {
 
     public MessageGui(Agent myAgent, ACLMessage reply, String msg, Boolean isProposal) {
         jFrame = new JFrame("Message for " + myAgent.getLocalName());
+
+        this.jFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                super.windowClosing(windowEvent);
+//                myAgent.killAgent(myAgent.getLocalName());
+            }
+        });
+
         jFrame.setSize(600, 400);
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
@@ -35,6 +44,7 @@ public class MessageGui {
                 	reply.setContent(msg);
                 	reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                     myAgent.send(reply);
+                    dispose();
                 }
             });
             jButtonReject.addActionListener(new ActionListener() {
@@ -43,6 +53,7 @@ public class MessageGui {
                 	reply.setContent(msg);
                 	reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
                     myAgent.send(reply);
+                    dispose();
                 }
             });
             jPanelNewMessage.add(jButtonAccept, BorderLayout.WEST);
@@ -61,7 +72,7 @@ public class MessageGui {
 	        
 	        jPanelNewMessage.add(newMessage, BorderLayout.CENTER);
 	        jPanelNewMessage.add(jButtonSend, BorderLayout.SOUTH);
-	        myAgent.openProject(selectProject);
+//	        myAgent.openProject(selectProject);
         }
         jPanel.add(jPanelNewMessage, BorderLayout.SOUTH);
         jFrame.add(jPanel);
@@ -80,5 +91,7 @@ public class MessageGui {
     public void dispose() {
         this.jFrame.dispose();
     }
+
+
 
 }

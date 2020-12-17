@@ -1,6 +1,5 @@
 package ase;
 
-import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 
 import java.util.ArrayList;
@@ -26,15 +25,19 @@ public class UserManagerAgent extends EnhancedAgent {
         users.add(new User("C3", "C", "customer"));
     }
 
+    public void registerUser(String userName, String password, String role) {
+        users.add(new User(userName, password, role));
+    }
+
     @Override
     protected void setup() {
         System.out.println("UserManagers-agent " + getAID().getName() + "is ready.");
         userGui = new UserGui(this);
         userGui.showGui();
-        addBehaviour(new TickerBehaviour (this, Long.valueOf(10000)) {
-        	protected void onTick() {
-        		System.out.println("UserManagers-agent " + getAID().getName() + "is cycling.");
-        	}
+        addBehaviour(new TickerBehaviour(this, Long.valueOf(10000)) {
+            protected void onTick() {
+                System.out.println("UserManagers-agent " + getAID().getName() + "is cycling.");
+            }
         });
     }
 
@@ -45,25 +48,20 @@ public class UserManagerAgent extends EnhancedAgent {
     }
 
     public void login(String userName, String password, String role) {
-//        addBehaviour(new OneShotBehaviour() {
-//            @Override
-//            public void action() {
-                for (User user : users) {
-                    if (user.getUsername().equals(userName) && user.getPassword().equals(password)) {
-                        System.out.println("Login Successfully " + user.getRole()+ ":" + User.PROVIDER);
-                        switch(user.getRole()) {
-                        case User.CUSTOMER:
-                        	createAgent("Customer:" + user.getUsername(), "ase.CustomerAgent");
-                        	break;
-                        case User.PROVIDER:
-                        	createAgent("Provider:" + user.getUsername(), "ase.ProviderAgent");
-                        }
-                        return;
-                    }
+        for (User user : users) {
+            if (user.getUsername().equals(userName) && user.getPassword().equals(password) && user.getRole().equals(role)) {
+                System.out.println("Login Successfully " + user.getRole() + ":" + User.PROVIDER);
+                switch (user.getRole()) {
+                    case User.CUSTOMER:
+                        createAgent("Customer:" + user.getUsername(), "ase.CustomerAgent");
+                        break;
+                    case User.PROVIDER:
+                        createAgent("Provider:" + user.getUsername(), "ase.ProviderAgent");
                 }
-                userGui.showWrongCredential();
-//            }
-//        });
+                return;
+            }
+        }
+        userGui.showWrongCredential();
     }
-    
+
 }

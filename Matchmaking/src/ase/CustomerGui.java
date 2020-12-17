@@ -1,71 +1,104 @@
 package ase;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Set;
+import jade.core.AID;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import jade.core.AID;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.Set;
 
 public class CustomerGui {
 
     JFrame jFrame;
     AID selectedProvider = null;
 
-    public CustomerGui(CustomerAgent myAgent, Set<AID> providers) {
+    public CustomerGui(CustomerAgent myAgent, Set<AID> providers, List<Project> projects) {
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
         jFrame.setSize(400, 400);
+
+        this.jFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                super.windowClosing(windowEvent);
+                myAgent.killAgent(myAgent.getLocalName());
+            }
+        });
+
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
 
-        DefaultListModel<String> l1 = new DefaultListModel<>();
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BorderLayout());
+        leftPanel.setSize(100, 400);
+
+        DefaultListModel<String> providersList = new DefaultListModel<>();
         for (AID provider : providers) {
-            l1.addElement(provider.getLocalName());
+            providersList.addElement(provider.getLocalName());
         }
-        JList<String> list = new JList<>(l1);
-        list.setFixedCellHeight(30);
+        JList<String> list = new JList<>(providersList);
+        list.setFixedCellHeight(50);
         list.setFixedCellWidth(100);
 
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-            	System.out.println("HERE");
+                System.out.println("HERE");
                 if (!e.getValueIsAdjusting()) {
                     System.out.println(list.getSelectedIndex());
                     for (AID provider : providers) {
-                    	System.out.println(provider.getLocalName() + "|" + list.getSelectedValue());
-                        if(provider.getLocalName().equals(list.getSelectedValue())) {
-                        	selectedProvider = provider;
+                        System.out.println(provider.getLocalName() + "|" + list.getSelectedValue());
+                        if (provider.getLocalName().equals(list.getSelectedValue())) {
+                            selectedProvider = provider;
                         }
                     }
                 }
             }
         });
+        leftPanel.add(list, BorderLayout.NORTH);
+
+        DefaultListModel<String> projectsListModel = new DefaultListModel<>();
+
+        for (Project project : projects) {
+            projectsListModel.addElement(project.getName());
+        }
+
+        JList<String> projectList = new JList<>(projectsListModel);
+        projectList.setFixedCellHeight(50);
+        projectList.setFixedCellWidth(100);
+
+        projectList.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                JList list = (JList) evt.getSource();
+                if (evt.getClickCount() == 2) {
+                    int index = list.locationToIndex(evt.getPoint());
+                    ProjectDetailGui projectDetailGui = new ProjectDetailGui(myAgent, projects.get(index));
+                    projectDetailGui.showGui();
+                    System.out.println("Clicked: " + index);
+                }
+            }
+        });
+
+        leftPanel.add(projectList, BorderLayout.CENTER);
+        jPanel.add(leftPanel, BorderLayout.WEST);
 
         JTextArea jTextAreaDescription = new JTextArea("Project Description");
         jTextAreaDescription.setRows(20);
         jTextAreaDescription.setColumns(20);
-        jPanel.add(list, BorderLayout.WEST);
 
         JPanel jPanel1 = new JPanel();
         jPanel1.setLayout(new BorderLayout());
 
         JTextField jTextFieldName = new HintTextField("Name");
-        jPanel1.add(jTextFieldName,BorderLayout.NORTH);
+        jPanel1.add(jTextFieldName, BorderLayout.NORTH);
         jPanel1.add(jTextAreaDescription, BorderLayout.CENTER);
 
-        jPanel.add(jPanel1,BorderLayout.CENTER);
+        jPanel.add(jPanel1, BorderLayout.CENTER);
 
         HintTextField bid = new HintTextField("BID:");
         bid.setPreferredSize(new Dimension(200, 24));
@@ -73,12 +106,12 @@ public class CustomerGui {
         jButtonSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	if(selectedProvider==null) {
-            		return;
-            	}
+                if (selectedProvider == null) {
+                    return;
+                }
                 Project project = new Project(jTextFieldName.getText(), jTextAreaDescription.getText(),
                         Integer.parseInt(bid.getText()));
-                System.out.println(jTextFieldName.getText()+ "  "+  project.toString());
+                System.out.println(jTextFieldName.getText() + "  " + project.toString());
                 myAgent.sendProposal(project, selectedProvider);
             }
         });
