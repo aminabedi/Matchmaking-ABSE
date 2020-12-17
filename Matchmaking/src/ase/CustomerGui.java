@@ -18,10 +18,13 @@ public class CustomerGui {
     JFrame jFrame;
     AID selectedProvider = null;
     DefaultListModel<String> providersList;
+    List<Project> projects;
+    DefaultListModel<String> projectsListModel;
 
     public CustomerGui(CustomerAgent myAgent, Set<AID> providers, List<Project> projects) {
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
         jFrame.setSize(400, 400);
+        this.projects = projects;
 
         this.jFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -63,9 +66,9 @@ public class CustomerGui {
         });
         leftPanel.add(list, BorderLayout.NORTH);
 
-        DefaultListModel<String> projectsListModel = new DefaultListModel<>();
+        projectsListModel = new DefaultListModel<>();
 
-        for (Project project : projects) {
+        for (Project project : this.projects) {
             projectsListModel.addElement(project.getName());
         }
 
@@ -78,7 +81,7 @@ public class CustomerGui {
                 JList list = (JList) evt.getSource();
                 if (evt.getClickCount() == 2) {
                     int index = list.locationToIndex(evt.getPoint());
-                    ProjectDetailGui projectDetailGui = new ProjectDetailGui(myAgent, projects.get(index));
+                    ProjectDetailGui projectDetailGui = new ProjectDetailGui(myAgent, CustomerGui.this.projects.get(index));
                     projectDetailGui.showGui();
                     System.out.println("Clicked: " + index);
                 }
@@ -133,8 +136,9 @@ public class CustomerGui {
         this.jFrame.dispose();
     }
 
-    public void addProject(Project project){
-        providersList.addElement(project.getName());
+    public void addProject(Project project) {
+        this.projects.add(project);
+        projectsListModel.addElement(project.getName());
     }
 
 }

@@ -11,6 +11,7 @@ public class ProviderGui {
 
     JFrame jFrame;
     DefaultListModel<String> projectsListModel;
+    List<Project> projects;
 
     public ProviderGui(ProviderAgent myAgent, List<Project> projects) {
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
@@ -22,7 +23,7 @@ public class ProviderGui {
                 myAgent.killAgent(myAgent.getLocalName());
             }
         });
-
+        this.projects = projects;
         jFrame.setSize(400, 400);
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
@@ -38,7 +39,7 @@ public class ProviderGui {
 
         projectsListModel = new DefaultListModel<>();
 
-        for (Project project : projects) {
+        for (Project project : this.projects) {
             projectsListModel.addElement(project.getName());
         }
 
@@ -72,8 +73,9 @@ public class ProviderGui {
         this.jFrame.dispose();
     }
 
-    public void addProject(Project project){
+    public void addProject(Project project) {
         projectsListModel.addElement(project.getName());
+        this.projects.add(project);
     }
 
 }

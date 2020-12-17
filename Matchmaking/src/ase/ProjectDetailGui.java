@@ -46,6 +46,8 @@ public class ProjectDetailGui {
             }
         });
         jPanel.add(jButtonSend, BorderLayout.SOUTH);
+        //done button
+        //rating
         this.jFrame.add(jPanel);
     }
 
