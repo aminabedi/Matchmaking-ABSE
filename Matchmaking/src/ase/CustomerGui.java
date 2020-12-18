@@ -147,12 +147,13 @@ public class CustomerGui {
                 myAgent.sendProposal(project, selectedProvider);
             }
         });
+        
 
         jPanelNewMessage.add(bid, BorderLayout.CENTER);
         jPanelNewMessage.add(jButtonSend, BorderLayout.SOUTH);
 
         creditLabel = new JLabel("Your credit: "+ myAgent.getCredit());
-        jPanelNewMessage1.add(creditLabel, BorderLayout.SOUTH);
+        jPanelNewMessage.add(creditLabel, BorderLayout.WEST);
 
         jPanel.add(jPanelNewMessage, BorderLayout.SOUTH);
 

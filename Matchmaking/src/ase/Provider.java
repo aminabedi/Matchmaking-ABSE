@@ -8,7 +8,7 @@ public class Provider extends User {
     private String skill;
     private List<Project> currentProjects = new ArrayList<>();
     private List<Project> doneProjects = new ArrayList<>();
-
+    protected Boolean isPremium = false;
     Provider(String username, String password, String role, String skill, int rating) {
         super(username, password, role, rating);
         this.skill = skill;
@@ -24,6 +24,10 @@ public class Provider extends User {
 
     public int getDoneProjectNumber() {
         return doneProjects.size();
+    }
+
+    public void setPremium(){
+        isPremium=true;
     }
 
     public String getInfo(){

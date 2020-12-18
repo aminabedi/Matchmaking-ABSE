@@ -2,9 +2,12 @@ package ase;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+
 
 
 public class ProviderGui {
@@ -13,6 +16,7 @@ public class ProviderGui {
     DefaultListModel<String> projectsListModel;
     List<Project> projects;
     JLabel creditLabel;
+    JLabel premiumLabel;
     ProviderAgent myAgent;
 
     public ProviderGui(ProviderAgent myAgent, List<Project> projects) {
@@ -30,11 +34,29 @@ public class ProviderGui {
         jFrame.setSize(400, 400);
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
-        creditLabel = new JLabel("Your credit: " + myAgent.getCredit());
+        creditLabel = new JLabel();
+        premiumLabel = new JLabel();
+        updateCredit();
+        updatePremium();
+        
         JPanel jPanelNewMessage = new JPanel();
         jPanelNewMessage.add(creditLabel, BorderLayout.CENTER);
+        jPanelNewMessage.add(premiumLabel, BorderLayout.SOUTH);
 
         jPanel.add(jPanelNewMessage, BorderLayout.CENTER);
+
+        if(!myAgent.getProvider().isPremium){
+            JButton premiumButton = new JButton("Go premium!");
+            premiumButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(myAgent.goPremium()){
+                        premiumButton.setVisible(false);
+                    }
+                }
+            });
+            jPanelNewMessage.add(premiumButton, BorderLayout.SOUTH);
+        }
 
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
@@ -83,6 +105,10 @@ public class ProviderGui {
     
     public void updateCredit() {
     	creditLabel.setText("Your credit: " + myAgent.getCredit());
+    }
+
+    public void updatePremium(){
+        premiumLabel.setText("You are" + (myAgent.getProvider().isPremium?" ":" not ")+ "a premium user");
     }
 
 }
