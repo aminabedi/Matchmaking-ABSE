@@ -3,6 +3,7 @@ package ase;
 import jade.core.behaviours.TickerBehaviour;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UserManagerAgent extends EnhancedAgent {
@@ -31,6 +32,11 @@ public class UserManagerAgent extends EnhancedAgent {
                 searchedProviders.add(provider);
             }
         }
+        Collections.sort(searchedProviders, (provider1, provider2) -> {
+            boolean bool1 = provider1.isPremium;
+            boolean bool2 = provider2.isPremium;
+            return (bool1 != bool2) ? (bool1) ? -1 : 1 : 0;
+        });
         return searchedProviders;
     }
 
