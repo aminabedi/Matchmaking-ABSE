@@ -5,4 +5,5 @@ public class Constants {
 	public static final String CHAT = "CHAT";
     public static final String RATE = "RATE";
     public static final String PAYMENT = "PAYMENT";
+    public static final int PREMIUM_PRICE = 100;
 }

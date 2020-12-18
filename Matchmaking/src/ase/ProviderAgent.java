@@ -112,5 +112,18 @@ public class ProviderAgent extends EnhancedAgent {
         credit += x;
         providerGui.updateCredit();
     }
-
+    public Provider getProvider(){
+        return UserManagerAgent.getProvider(this.getLocalName().split(":")[1]);
+    }
+    public Boolean goPremium(){
+        if(getCredit()<Constants.PREMIUM_PRICE){
+            return false;
+        }
+        addCredit(-Constants.PREMIUM_PRICE);
+        Provider p = getProvider();
+        p.setPremium();
+        providerGui.updatePremium();
+        return true;
+        
+    }
 }
