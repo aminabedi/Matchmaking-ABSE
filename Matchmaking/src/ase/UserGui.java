@@ -48,6 +48,7 @@ public class UserGui {
         });
 
         JButton button_register = new JButton("Register");
+        
         button_register.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -55,6 +56,15 @@ public class UserGui {
 //                System.out.println("User: "+textField_userName.getText()+" is registered successfully");
                 RegistrationGui registrationGui = new RegistrationGui(userManagerAgent);
                 registrationGui.showGui();
+            }
+        });
+
+        JButton button_guest = new JButton("Guest");
+        button_guest.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuestGui guestGui = new GuestGui(userManagerAgent.searchForService("project-provide"));
+                guestGui.showGui();
             }
         });
 
@@ -66,6 +76,7 @@ public class UserGui {
         jPanel.add(comboBox_userType);
         jPanel.add(button_login);
         jPanel.add(button_register);
+        jPanel.add(button_guest);
 
         this.jFrame.add(jPanel);
     }
