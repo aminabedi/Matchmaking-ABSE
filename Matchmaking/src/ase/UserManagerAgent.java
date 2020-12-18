@@ -25,20 +25,20 @@ public class UserManagerAgent extends EnhancedAgent {
     }
 
     private void addMockUsers() {
-        providers.add(new Provider("P1", "1", "provider", "Java"));
-        providers.add(new Provider("P2", "2", "provider", "PHP"));
-        providers.add(new Provider("P3", "3", "provider", "C"));
+        providers.add(new Provider("P1", "1", "provider", "Java", 5));
+        providers.add(new Provider("P2", "2", "provider", "PHP", 4));
+        providers.add(new Provider("P3", "3", "provider", "C", 3));
 
-        customers.add(new Customer("C1", "1", "customer"));
-        customers.add(new Customer("C2", "2", "customer"));
-        customers.add(new Customer("C3", "3", "customer"));
+        customers.add(new Customer("C1", "1", "customer", 2));
+        customers.add(new Customer("C2", "2", "customer", 6));
+        customers.add(new Customer("C3", "3", "customer", 8));
     }
 
     public void registerUser(String userName, String password, String role, String skill) {
         if (role.isEmpty()) {
-            customers.add(new Customer(userName, password, role));
+            customers.add(new Customer(userName, password, role, 0));
         } else {
-            providers.add(new Provider(userName, password, role, skill));
+            providers.add(new Provider(userName, password, role, skill, 0));
         }
     }
 

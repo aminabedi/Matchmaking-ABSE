@@ -1,15 +1,16 @@
 package ase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Provider extends User {
 
     private String skill;
-    private List<Project> currentProjects;
-    private List<Project> doneProjects;
+    private List<Project> currentProjects = new ArrayList<>();
+    private List<Project> doneProjects = new ArrayList<>();
 
-    Provider(String username, String password, String role, String skill) {
-        super(username, password, role);
+    Provider(String username, String password, String role, String skill, int rating) {
+        super(username, password, role, rating);
         this.skill = skill;
     }
 

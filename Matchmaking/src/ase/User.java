@@ -5,14 +5,16 @@ public class User {
     private String username;
     private String password;
     private String role;
+    private int rating;
 
     public static final String PROVIDER = "provider";
     public static final String CUSTOMER = "customer";
 
-    User(String username, String password, String role) {
+    User(String username, String password, String role, int rating) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.rating = rating;
     }
 
     public void setUsername(String username) {
@@ -39,6 +41,8 @@ public class User {
         return this.role;
     }
 
-
+    public int getRating(){
+        return rating;
+    }
 
 }
