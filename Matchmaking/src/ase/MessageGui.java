@@ -15,7 +15,8 @@ public class MessageGui {
     JFrame jFrame;
     JTextArea jTextAreaMessages;
 
-    public MessageGui(Agent myAgent, ACLMessage reply, String msg, Boolean isProposal) {
+    public MessageGui(Agent myAgent, ACLMessage reply, ACLMessage msg, Boolean isProposal) {
+        String content = msg.getContent();
         jFrame = new JFrame("Message for " + myAgent.getLocalName());
 
         this.jFrame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -30,7 +31,7 @@ public class MessageGui {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
 
-        JLabel jLabel = new JLabel("<html>" + msg.replaceAll("\n", "<br>") + "</html>");
+        JLabel jLabel = new JLabel("<html>" + content.replaceAll("\n", "<br>") + "</html>");
         jLabel.setSize(new Dimension(20, 20));
         jPanel.add(jLabel, BorderLayout.CENTER);
         
@@ -41,11 +42,11 @@ public class MessageGui {
             jButtonAccept.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	reply.setContent(msg);
+                	reply.setContent(content);
                 	reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                     myAgent.send(reply);
-                    String c[] = msg.split(":");
-                    Project project = new Project(c[0], c[1], Integer.parseInt(c[2]), reply.getSender(), myAgent.getAID(),"");
+                    String c[] = content.split(":");
+                    Project project = new Project(c[0], c[1], Integer.parseInt(c[2]), myAgent.getAID(), msg.getSender(),"");
                     ((ProviderAgent)myAgent).providerGui.addProject(project);
                     dispose();
                 }
@@ -53,7 +54,7 @@ public class MessageGui {
             jButtonReject.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	reply.setContent(msg);
+                	reply.setContent(content);
                 	reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
                     myAgent.send(reply);
                     dispose();
@@ -68,7 +69,7 @@ public class MessageGui {
 	        jButtonSend.addActionListener(new ActionListener() {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
-	            	reply.setContent(msg + "\n" + newMessage.getText());
+	            	reply.setContent(content + "\n" + newMessage.getText());
 	                myAgent.send(reply);
 	            }
 	        });
