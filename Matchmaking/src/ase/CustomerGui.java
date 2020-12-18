@@ -24,8 +24,10 @@ public class CustomerGui {
     List<Project> projects;
     DefaultListModel<String> projectsListModel;
     JLabel creditLabel;
+    CustomerAgent myAgent;
 
     public CustomerGui(CustomerAgent myAgent, Set<AID> providers, List<Project> projects) {
+        this.myAgent = myAgent;
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
         jFrame.setSize(1000, 400);
         this.projects = projects;
@@ -142,7 +144,7 @@ public class CustomerGui {
                 myAgent.sendProposal(project, selectedProvider);
             }
         });
-        JPanel jPanelNewMessage = new JPanel();
+
         jPanelNewMessage.add(bid, BorderLayout.CENTER);
         jPanelNewMessage.add(jButtonSend, BorderLayout.SOUTH);
 
@@ -166,5 +168,7 @@ public class CustomerGui {
         this.projects.add(project);
         projectsListModel.addElement(project.getName());
     }
-
+    public void updateCredit() {
+    	creditLabel.setText("Your credit: " + myAgent.getCredit());
+    }
 }

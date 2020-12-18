@@ -53,6 +53,7 @@ public class ProviderAgent extends EnhancedAgent {
 
             msg = myAgent.receive();
             if (msg != null){
+                System.out.println("PRVD:" +msg.getPerformative() + " " + msg.getConversationId());
                 if (msg.getPerformative() == ACLMessage.PROPOSE){
                     String content = msg.getContent();
                     reply = msg.createReply();
@@ -77,6 +78,7 @@ public class ProviderAgent extends EnhancedAgent {
                 }
                 else if (msg.getConversationId() == Constants.PAYMENT)
                 {
+                    System.out.println("Recieving payment "+ msg.getContent());
                     int bid = Integer.parseInt(msg.getContent());
                     myAgent.addCredit(bid);
                 }
@@ -107,8 +109,8 @@ public class ProviderAgent extends EnhancedAgent {
     	return credit;
     }
     public void addCredit(int x) {
-    	providerGui.updateCredit();
-    	credit += x;
+        credit += x;
+        providerGui.updateCredit();
     }
 
 }
