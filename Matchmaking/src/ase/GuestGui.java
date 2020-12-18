@@ -28,33 +28,35 @@ public class GuestGui {
 
     List<Provider> currentProviders = new ArrayList<>();
 
-    public GuestGui(Set<AID> providers) {
+    public GuestGui(List<Provider> providers) {
         System.out.println("number of providers: ");
         System.out.println(providers.size());
 
         jFrame = new JFrame("Welcome Guest user");
-        jFrame.setSize(1000, 600);
+        jFrame.setSize(600, 600);
 
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
 
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
-        leftPanel.setSize(1000, 600);
+        leftPanel.setSize(600, 600);
 
         providersList = new DefaultListModel<>();
-        for (AID provider : providers) {
-            Provider provider1 = UserManagerAgent.getProvider(provider.getLocalName().split(":")[1]);
-            currentProviders.add(provider1);
-            String text = provider1.getInfo();
+        for (Provider provider : providers) {
+            currentProviders.add(provider);
+            String text = provider.getInfo();
             providersList.addElement(text);
         }
         JList<String> list = new JList<>(providersList);
+
+        list.setCellRenderer(new MyRenderer());
+
         JPanel providerPanel = new JPanel();
         providerPanel.setLayout(new BorderLayout());
         providerPanel.add(new JLabel("Providers:"),BorderLayout.NORTH);
         providerPanel.add(list,BorderLayout.CENTER);
-        leftPanel.add(providerPanel, BorderLayout.SOUTH);
+        leftPanel.add(providerPanel, BorderLayout.CENTER);
 
         HintTextField searchTextField = new HintTextField("Search Provider");
         searchTextField.setSize(new Dimension(200, 24));
@@ -90,7 +92,7 @@ public class GuestGui {
         });
 
 
-        jPanel.add(leftPanel, BorderLayout.WEST);
+        jPanel.add(leftPanel, BorderLayout.CENTER);
 
         
         jFrame.add(jPanel);
@@ -104,4 +106,14 @@ public class GuestGui {
         this.jFrame.dispose();
     }
 
+    class MyRenderer extends DefaultListCellRenderer {
+        public Component getListCellRendererComponent(JList list,Object value,
+                                                      int index,boolean isSelected,boolean cellHasFocus)
+        {
+            JLabel lbl = (JLabel)super.getListCellRendererComponent(list,value,index,isSelected,cellHasFocus);
+            if(currentProviders.get(index).isPremium) lbl.setForeground(Color.RED);
+            else lbl.setForeground(Color.BLACK);
+            return lbl;
+        }
+    }
 }

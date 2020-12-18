@@ -63,7 +63,7 @@ public class UserGui {
         button_guest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GuestGui guestGui = new GuestGui(userManagerAgent.searchForService("project-provide"));
+                GuestGui guestGui = new GuestGui(UserManagerAgent.providers);
                 guestGui.showGui();
             }
         });

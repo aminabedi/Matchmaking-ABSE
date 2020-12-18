@@ -33,9 +33,9 @@ public class UserManagerAgent extends EnhancedAgent {
             }
         }
         Collections.sort(searchedProviders, (provider1, provider2) -> {
-            boolean bool1 = provider1.isPremium;
-            boolean bool2 = provider2.isPremium;
-            return (bool1 != bool2) ? (bool1) ? -1 : 1 : 0;
+            boolean b1 = provider1.isPremium;
+            boolean b2 = provider2.isPremium;
+            return (b1 != b2) ? (b1) ? -1 : 1 : 0;
         });
         return searchedProviders;
     }
@@ -65,6 +65,11 @@ public class UserManagerAgent extends EnhancedAgent {
         System.out.println("UserManagers-agent " + getAID().getName() + "is ready.");
         userGui = new UserGui(this);
         userGui.showGui();
+        Collections.sort(providers, (provider1, provider2) -> {
+            boolean b1 = provider1.isPremium;
+            boolean b2 = provider2.isPremium;
+            return (b1 != b2) ? (b1) ? -1 : 1 : 0;
+        });
         addBehaviour(new TickerBehaviour(this, Long.valueOf(10000)) {
             protected void onTick() {
                 System.out.println("UserManagers-agent " + getAID().getName() + "is cycling.");

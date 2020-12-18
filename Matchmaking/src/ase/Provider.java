@@ -31,7 +31,8 @@ public class Provider extends User {
     }
 
     public String getInfo(){
-        String text =  "Name: " + getUsername() + ", ";
+        String text =  "";
+        text += "Name: " + getUsername() + ", ";
         text += "Role: " + getRole() + ", ";
         text += "Skill: " + getSkill() + ", ";
         text += "Completed Project No: " + getDoneProjectNumber() + ",";
