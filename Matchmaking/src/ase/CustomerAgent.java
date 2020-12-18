@@ -12,7 +12,7 @@ public class CustomerAgent extends EnhancedAgent {
     List<Project> projects;
     int currentNumber = 0;
     CustomerGui gui;
-
+    private int credit = 1000;
     @Override
     protected void setup() {
         System.out.println("Hello! CustomerAgent " + getAID().getName() + " is here!");
@@ -91,5 +91,20 @@ public class CustomerAgent extends EnhancedAgent {
         message.setContent(rate);
         message.addReceiver(provider);
         send(message);
+    }
+    
+    public void markProjectDone(Project project) {
+    	addCredit(-1 * project.getBid());
+    	ACLMessage message = new ACLMessage(ACLMessage.CONFIRM);
+        message.setConversationId(Constants.PAYMENT);
+        message.setContent(""+project.getBid());
+        message.addReceiver(project.getProvider());
+        send(message);
+    }
+    public int getCredit() {
+    	return credit;
+    }
+    public void addCredit(int x) {
+    	credit += x;
     }
 }

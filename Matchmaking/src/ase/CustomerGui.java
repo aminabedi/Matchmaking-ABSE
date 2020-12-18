@@ -20,6 +20,7 @@ public class CustomerGui {
     DefaultListModel<String> providersList;
     List<Project> projects;
     DefaultListModel<String> projectsListModel;
+    JLabel creditLabel;
 
     public CustomerGui(CustomerAgent myAgent, Set<AID> providers, List<Project> projects) {
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
@@ -44,11 +45,7 @@ public class CustomerGui {
         providersList = new DefaultListModel<>();
         for (AID provider : providers) {
             Provider currentProvider = UserManagerAgent.getProvider(provider.getLocalName().split(":")[1]);
-            String text = "Name: " + currentProvider.getUsername() + ", ";
-            text += "Role: " + currentProvider.getRole() + ", ";
-            text += "Skill: " + currentProvider.getSkill() + ", ";
-            text += "Completed Project No: " + currentProvider.getDoneProjectNumber() + ",";
-            text += "Rating:" + currentProvider.getRating();
+            String text = currentProvider.getInfo();
             providersList.addElement(text);
         }
         JList<String> list = new JList<>(providersList);
@@ -58,12 +55,11 @@ public class CustomerGui {
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                System.out.println("HERE");
                 if (!e.getValueIsAdjusting()) {
                     System.out.println(list.getSelectedIndex());
                     for (AID provider : providers) {
-                        System.out.println(provider.getLocalName() + "|" + list.getSelectedValue());
-                        if (provider.getLocalName().equals(list.getSelectedValue())) {
+                        Provider currentProvider = UserManagerAgent.getProvider(provider.getLocalName().split(":")[1]);
+                        if (currentProvider.getInfo().equals(list.getSelectedValue())) {
                             selectedProvider = provider;
                         }
                     }
@@ -128,6 +124,9 @@ public class CustomerGui {
         JPanel jPanelNewMessage = new JPanel();
         jPanelNewMessage.add(bid, BorderLayout.CENTER);
         jPanelNewMessage.add(jButtonSend, BorderLayout.SOUTH);
+
+        creditLabel = new JLabel("Your credit: "+ myAgent.getCredit());
+        jPanelNewMessage.add(creditLabel, BorderLayout.SOUTH);
 
         jPanel.add(jPanelNewMessage, BorderLayout.SOUTH);
 

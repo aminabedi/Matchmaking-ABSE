@@ -25,4 +25,13 @@ public class Provider extends User {
     public int getDoneProjectNumber() {
         return doneProjects.size();
     }
+
+    public String getInfo(){
+        String text =  "Name: " + getUsername() + ", ";
+        text += "Role: " + getRole() + ", ";
+        text += "Skill: " + getSkill() + ", ";
+        text += "Completed Project No: " + getDoneProjectNumber() + ",";
+        text += "Rating:" + getRating();
+        return text;
+    }
 }

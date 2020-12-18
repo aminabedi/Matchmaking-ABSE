@@ -12,8 +12,11 @@ public class ProviderGui {
     JFrame jFrame;
     DefaultListModel<String> projectsListModel;
     List<Project> projects;
+    JLabel creditLabel;
+    ProviderAgent myAgent;
 
     public ProviderGui(ProviderAgent myAgent, List<Project> projects) {
+    	this.myAgent = myAgent;
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
 
         this.jFrame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -27,9 +30,9 @@ public class ProviderGui {
         jFrame.setSize(400, 400);
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
-        JLabel jButton = new JLabel("Please wait for proposals");
+        creditLabel = new JLabel("Your credit: " + myAgent.getCredit());
         JPanel jPanelNewMessage = new JPanel();
-        jPanelNewMessage.add(jButton, BorderLayout.CENTER);
+        jPanelNewMessage.add(creditLabel, BorderLayout.CENTER);
 
         jPanel.add(jPanelNewMessage, BorderLayout.CENTER);
 
@@ -76,6 +79,10 @@ public class ProviderGui {
     public void addProject(Project project) {
         projectsListModel.addElement(project.getName());
         this.projects.add(project);
+    }
+    
+    public void updateCredit() {
+    	creditLabel.setText("Your credit: " + myAgent.getCredit());
     }
 
 }

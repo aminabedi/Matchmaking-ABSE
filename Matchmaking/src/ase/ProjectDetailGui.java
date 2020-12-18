@@ -88,7 +88,9 @@ public class ProjectDetailGui {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
                 System.out.println("Done" + ratingTextField.getText() + commentTextField.getText());
+                agent.markProjectDone(project);
                 agent.sendRating(project.getProvider(), ratingTextField.getText());
+                
             }
         });
 

@@ -9,14 +9,15 @@ import java.util.List;
 
 public class ProviderAgent extends EnhancedAgent {
     private List<Project> projects;
-    ArrayList<Integer> ratings;
+    ArrayList<Integer> ratings=new ArrayList<>();
     ProviderGui providerGui;
     private double rate = 0.0;
+    private int credit = 1000;
 
     @Override
     protected void setup() {
     	System.out.println("SETTING UP A PROVIDER AGENT");
-    	projects = new ArrayList<>();
+        projects = new ArrayList<>();
 //    	addSomeMockProjects();
         register("project-provide");
         addBehaviour(new RecieveProposal());
@@ -36,7 +37,7 @@ public class ProviderAgent extends EnhancedAgent {
 
 
     private class RecieveProposal extends CyclicBehaviour {
-    	
+    	ProviderAgent myAgent;
     	public RecieveProposal() {
     		super(ProviderAgent.this);
     		myAgent = ProviderAgent.this;
@@ -53,9 +54,7 @@ public class ProviderAgent extends EnhancedAgent {
             msg = myAgent.receive();
             if (msg != null){
                 if (msg.getPerformative() == ACLMessage.PROPOSE){
-                    System.out.println("Received a proposal");
                     String content = msg.getContent();
-                    System.out.println("Received a proposal:" + content);
                     reply = msg.createReply();
                     MessageGui msgGui = new MessageGui(myAgent, reply, content, true);
                     // TODO: Instead of this, corresponded projectGUI would be opened.
@@ -76,7 +75,14 @@ public class ProviderAgent extends EnhancedAgent {
                     update_rate_and_name();
 
                 }
+                else if (msg.getConversationId() == Constants.PAYMENT)
+                {
+                    int bid = Integer.parseInt(msg.getContent());
+                    myAgent.addCredit(bid);
+                }
             }
+            
+            
 //            else {
 //                block();
 //            }
@@ -97,11 +103,12 @@ public class ProviderAgent extends EnhancedAgent {
         System.out.println("changed rate");
     }
 
-//    private void addSomeMockProjects() {
-//        projects = new ArrayList<>();
-//        projects.add(new Project("Project 1", "Description 1", 10));
-//        projects.add(new Project("Project 2", "Description 2", 20));
-//        projects.add(new Project("Project 3", "Description 3", 30));
-//    }
+    public int getCredit() {
+    	return credit;
+    }
+    public void addCredit(int x) {
+    	providerGui.updateCredit();
+    	credit += x;
+    }
 
 }

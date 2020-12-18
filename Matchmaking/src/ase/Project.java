@@ -55,7 +55,7 @@ public class Project {
     	return "" + name + ":" + description + ":" + bid; 
     }
     
-    public String   getContract() {
+    public String getContract() {
     	return "Contract for project: " + toString();
     }
     
@@ -83,6 +83,9 @@ public class Project {
         messagesHistory.add(chatMessage);
     }
 
+    public int getBid() {
+    	return bid;
+    }
     public AID getProvider() {
         return provider;
     }
