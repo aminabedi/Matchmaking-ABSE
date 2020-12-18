@@ -154,7 +154,7 @@ public class CustomerGui {
         creditLabel = new JLabel("Your credit: "+ myAgent.getCredit());
         jPanelNewMessage1.add(creditLabel, BorderLayout.SOUTH);
 
-        jPanel.add(jPanelNewMessage1, BorderLayout.SOUTH);
+        jPanel.add(jPanelNewMessage, BorderLayout.SOUTH);
 
         jFrame.add(jPanel);
     }
