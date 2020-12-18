@@ -27,13 +27,10 @@ public class CustomerGui {
     CustomerAgent myAgent;
 
     public CustomerGui(CustomerAgent myAgent, Set<AID> providers, List<Project> projects) {
-<<<<<<< HEAD
         this.myAgent = myAgent;
-=======
         System.out.println("number of providers: ");
         System.out.println(providers.size());
 
->>>>>>> 37b772d6c22477c05a0c2c00b8cea9bb0813ff11
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
         jFrame.setSize(1000, 400);
         this.projects = projects;
