@@ -5,6 +5,8 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -12,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -24,10 +27,11 @@ public class CustomerGui {
     List<Project> projects;
     DefaultListModel<String> projectsListModel;
     JLabel creditLabel;
+    List<Provider> currentProviders = new ArrayList<>();
 
     public CustomerGui(CustomerAgent myAgent, Set<AID> providers, List<Project> projects) {
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
-        jFrame.setSize(1000, 400);
+        jFrame.setSize(1000, 600);
         this.projects = projects;
 
         this.jFrame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -43,18 +47,16 @@ public class CustomerGui {
 
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
-        leftPanel.setSize(100, 400);
+        leftPanel.setSize(600, 600);
 
         providersList = new DefaultListModel<>();
         for (AID provider : providers) {
-            Provider currentProvider = UserManagerAgent.getProvider(provider.getLocalName().split(":")[1]);
-            String text = currentProvider.getInfo();
+            Provider provider1 = UserManagerAgent.getProvider(provider.getLocalName().split(":")[1]);
+            currentProviders.add(provider1);
+            String text = provider1.getInfo();
             providersList.addElement(text);
         }
         JList<String> list = new JList<>(providersList);
-        list.setFixedCellHeight(50);
-        list.setFixedCellWidth(500);
-
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -69,7 +71,40 @@ public class CustomerGui {
                 }
             }
         });
-        leftPanel.add(list, BorderLayout.NORTH);
+        leftPanel.add(list, BorderLayout.SOUTH);
+
+        HintTextField searchTextField = new HintTextField("Search Provider");
+        searchTextField.setSize(new Dimension(200, 24));
+        leftPanel.add(searchTextField, BorderLayout.NORTH);
+        searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                searchProviders(e);
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                searchProviders(e);
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                searchProviders(e);
+            }
+
+            private void searchProviders(DocumentEvent e) {
+                String searchedText = searchTextField.getText();
+                if (searchedText.isEmpty()) {
+                    providersList.removeAllElements();
+                    for(Provider provider:currentProviders){
+                        providersList.addElement(provider.getInfo());
+                    }
+                } else {
+                    providersList.removeAllElements();
+                    List<Provider> searchedProviders = UserManagerAgent.searchProvider(searchedText,currentProviders);
+                    for (Provider provider : searchedProviders) {
+                        providersList.addElement(provider.getInfo());
+                    }
+                }
+            }
+        });
 
         projectsListModel = new DefaultListModel<>();
 
@@ -78,8 +113,6 @@ public class CustomerGui {
         }
 
         JList<String> projectList = new JList<>(projectsListModel);
-        projectList.setFixedCellHeight(50);
-        projectList.setFixedCellWidth(100);
 
         projectList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
@@ -137,16 +170,16 @@ public class CustomerGui {
                     return;
                 }
                 Project project = new Project(jTextFieldName.getText(), jTextAreaDescription.getText(),
-                        Integer.parseInt(bid.getText()), selectedProvider, myAgent.getAID(), model.getYear()+"/"+model.getMonth()+"/"+model.getDay());
+                        Integer.parseInt(bid.getText()), selectedProvider, myAgent.getAID(), model.getYear() + "/" + model.getMonth() + "/" + model.getDay());
                 System.out.println(jTextFieldName.getText() + "  " + project.toString());
                 myAgent.sendProposal(project, selectedProvider);
             }
         });
-        JPanel jPanelNewMessage = new JPanel();
+//        JPanel jPanelNewMessage = new JPanel();
         jPanelNewMessage.add(bid, BorderLayout.CENTER);
         jPanelNewMessage.add(jButtonSend, BorderLayout.SOUTH);
 
-        creditLabel = new JLabel("Your credit: "+ myAgent.getCredit());
+        creditLabel = new JLabel("Your credit: " + myAgent.getCredit());
         jPanelNewMessage.add(creditLabel, BorderLayout.SOUTH);
 
         jPanel.add(jPanelNewMessage, BorderLayout.SOUTH);
