@@ -2,8 +2,8 @@ package ase;
 
 import jade.core.behaviours.TickerBehaviour;
 
-import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UserManagerAgent extends EnhancedAgent {
@@ -28,16 +28,23 @@ public class UserManagerAgent extends EnhancedAgent {
     public static List<Provider> searchProvider(String text, List<Provider> providersList) {
         List<Provider> searchedProviders = new ArrayList<>();
         for (Provider provider : providersList) {
-            if (provider.getUsername().contains(text) || provider.getSkill().contains(text)) {
+            if (provider.getUsername().contains(text) || provider.getSkill().contains(text) || provider.isPremium) {
                 searchedProviders.add(provider);
             }
         }
+        Collections.sort(searchedProviders, (provider1, provider2) -> {
+            boolean bool1 = provider1.isPremium;
+            boolean bool2 = provider2.isPremium;
+            return (bool1 != bool2) ? (bool1) ? -1 : 1 : 0;
+        });
         return searchedProviders;
     }
 
     private void addMockUsers() {
+        Provider p = new Provider("P2", "2", "provider", "PHP", 4);
+        p.setPremium();
         providers.add(new Provider("P1", "1", "provider", "Java", 5));
-        providers.add(new Provider("P2", "2", "provider", "PHP", 4));
+        providers.add(p);
         providers.add(new Provider("P3", "3", "provider", "C", 3));
 
         customers.add(new Customer("C1", "1", "customer", 2));
