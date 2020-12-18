@@ -51,8 +51,10 @@ public class UserGui {
         button_register.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                userManagerAgent.registerUser(textField_userName.getText(), textField_password.getText(), comboBox_userType.getSelectedItem().toString());
-                System.out.println("User: "+textField_userName.getText()+" is registered successfully");
+//                userManagerAgent.registerUser(textField_userName.getText(), textField_password.getText(), comboBox_userType.getSelectedItem().toString());
+//                System.out.println("User: "+textField_userName.getText()+" is registered successfully");
+                RegistrationGui registrationGui = new RegistrationGui(userManagerAgent);
+                registrationGui.showGui();
             }
         });
 

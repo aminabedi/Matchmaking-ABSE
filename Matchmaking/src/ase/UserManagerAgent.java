@@ -16,17 +16,17 @@ public class UserManagerAgent extends EnhancedAgent {
     }
 
     private void addMockUsers() {
-        users.add(new User("P1", "1", "provider"));
-        users.add(new User("P2", "2", "provider"));
-        users.add(new User("P3", "3", "provider"));
+        users.add(new User("P1", "1", "provider", "Java"));
+        users.add(new User("P2", "2", "provider", "PHP"));
+        users.add(new User("P3", "3", "provider", "C"));
 
-        users.add(new User("C1", "1", "customer"));
-        users.add(new User("C2", "2", "customer"));
-        users.add(new User("C3", "3", "customer"));
+        users.add(new User("C1", "1", "customer", ""));
+        users.add(new User("C2", "2", "customer", ""));
+        users.add(new User("C3", "3", "customer", ""));
     }
 
-    public void registerUser(String userName, String password, String role) {
-        users.add(new User(userName, password, role));
+    public void registerUser(String userName, String password, String role, String skill) {
+        users.add(new User(userName, password, role, skill));
     }
 
     @Override
