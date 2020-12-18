@@ -15,13 +15,15 @@ public class Project {
     private ArrayList<String> messagesHistory = new ArrayList<>();
     private AID provider;
     private AID customer;
+    private String deadline;
 
-    public Project(String name, String description, int bid, AID provider, AID customer) {
+    public Project(String name, String description, int bid, AID provider, AID customer,String deadline) {
         this.name = name;
         this.bid = bid;
         this.description = description;
         this.provider = provider;
         this.customer = customer;
+        this.deadline = deadline;
     }
 
 

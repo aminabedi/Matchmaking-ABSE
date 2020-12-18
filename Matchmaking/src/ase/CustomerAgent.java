@@ -36,7 +36,7 @@ public class CustomerAgent extends EnhancedAgent {
                     if (msg.getConversationId() == Constants.PROJECT_REG){
                         String content = null;
                         String c[] = msg.getContent().split(":");
-                        Project project = new Project(c[0], c[1], Integer.parseInt(c[2]), msg.getSender(), myAgent.getAID());
+                        Project project = new Project(c[0], c[1], Integer.parseInt(c[2]), msg.getSender(), myAgent.getAID(),"");
                         if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
                             reply = new ACLMessage(ACLMessage.INFORM);
                             reply.setConversationId(Constants.CHAT);

@@ -22,7 +22,7 @@ public class RegistrationGui {
         });
 
         this.userManagersAgent = userManagerAgent;
-        this.jFrame.setSize(400, 400);
+        this.jFrame.setSize(325, 400);
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new FlowLayout());
 
@@ -37,13 +37,7 @@ public class RegistrationGui {
         JComboBox comboBox_skills = new JComboBox(skills);
 
         JButton button_register = new JButton("Register");
-        button_register.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                userManagerAgent.registerUser(textField_userName.getText(), textField_password.getText(), comboBox_userType.getSelectedItem().toString(), comboBox_skills.getSelectedItem().toString());
-                System.out.println("User: " + textField_userName.getText() + " is registered successfully");
-            }
-        });
+
 
         comboBox_userType.addActionListener(new ActionListener() {
             @Override
@@ -59,12 +53,31 @@ public class RegistrationGui {
         textField_userName.setPreferredSize(new Dimension(200, 24));
         textField_password.setPreferredSize(new Dimension(200, 24));
 
+        JTextArea jTextArea = new JTextArea("Agreement: This is the demo for the ABSE course");
+        jTextArea.setRows(7);
+        JCheckBox jCheckBox_agree = new JCheckBox("I agree");
+
+
+        button_register.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!jCheckBox_agree.isSelected()) {
+                    JOptionPane.showMessageDialog(jFrame, "Please read the agreement and select I agree", "ERROR",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                userManagerAgent.registerUser(textField_userName.getText(), textField_password.getText(), comboBox_userType.getSelectedItem().toString(), comboBox_skills.getSelectedItem().toString());
+                System.out.println("User: " + textField_userName.getText() + " is registered successfully");
+            }
+        });
+
         jPanel.add(textField_userName);
         jPanel.add(textField_password);
         jPanel.add(comboBox_userType);
         jPanel.add(comboBox_skills);
+        jPanel.add(jTextArea);
+        jPanel.add(jCheckBox_agree);
         jPanel.add(button_register);
-
         this.jFrame.add(jPanel);
     }
 

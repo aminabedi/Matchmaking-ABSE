@@ -1,6 +1,8 @@
 package ase;
 
 import jade.core.AID;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -11,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 public class CustomerGui {
@@ -113,6 +116,24 @@ public class CustomerGui {
         HintTextField bid = new HintTextField("BID:");
         bid.setPreferredSize(new Dimension(200, 24));
         JButton jButtonSend = new JButton("Create");
+
+        JPanel jPanelNewMessage = new JPanel();
+        jPanelNewMessage.add(bid, BorderLayout.CENTER);
+        jPanelNewMessage.add(jButtonSend, BorderLayout.WEST);
+
+
+        UtilDateModel model = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        datePanel.setPreferredSize(new Dimension(200, 200));
+        jPanelNewMessage.add(datePanel, BorderLayout.SOUTH);
+
+        jPanel.add(jPanelNewMessage, BorderLayout.SOUTH);
+
+
         jButtonSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -120,16 +141,11 @@ public class CustomerGui {
                     return;
                 }
                 Project project = new Project(jTextFieldName.getText(), jTextAreaDescription.getText(),
-                        Integer.parseInt(bid.getText()), selectedProvider, myAgent.getAID());
+                        Integer.parseInt(bid.getText()), selectedProvider, myAgent.getAID(), model.getYear()+"/"+model.getMonth()+"/"+model.getDay());
                 System.out.println(jTextFieldName.getText() + "  " + project.toString());
                 myAgent.sendProposal(project, selectedProvider);
             }
         });
-        JPanel jPanelNewMessage = new JPanel();
-        jPanelNewMessage.add(bid, BorderLayout.CENTER);
-        jPanelNewMessage.add(jButtonSend, BorderLayout.SOUTH);
-
-        jPanel.add(jPanelNewMessage, BorderLayout.SOUTH);
 
         jFrame.add(jPanel);
     }
