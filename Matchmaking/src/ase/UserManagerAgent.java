@@ -2,6 +2,7 @@ package ase;
 
 import jade.core.behaviours.TickerBehaviour;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,16 @@ public class UserManagerAgent extends EnhancedAgent {
             }
         }
         return null;
+    }
+
+    public static List<Provider> searchProvider(String text, List<Provider> providersList) {
+        List<Provider> searchedProviders = new ArrayList<>();
+        for (Provider provider : providersList) {
+            if (provider.getUsername().contains(text) || provider.getSkill().contains(text)) {
+                searchedProviders.add(provider);
+            }
+        }
+        return searchedProviders;
     }
 
     private void addMockUsers() {
