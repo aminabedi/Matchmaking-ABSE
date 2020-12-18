@@ -57,6 +57,8 @@ public class CustomerGui {
         leftPanel.setSize(600, 600);
 
         providersList = new DefaultListModel<>();
+
+
         for (AID provider : providers) {
             Provider provider1 = UserManagerAgent.getProvider(provider.getLocalName().split(":")[1]);
             currentProviders.add(provider1);
@@ -64,6 +66,9 @@ public class CustomerGui {
             providersList.addElement(text);
         }
         JList<String> list = new JList<>(providersList);
+
+        list.setCellRenderer(new MyRenderer());
+
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -112,6 +117,8 @@ public class CustomerGui {
                     providersList.removeAllElements();
                     List<Provider> searchedProviders = UserManagerAgent.searchProvider(searchedText, currentProviders);
                     for (Provider provider : searchedProviders) {
+                        if(provider.isPremium){
+                        }
                         providersList.addElement(provider.getInfo());
                     }
                 }
@@ -218,5 +225,16 @@ public class CustomerGui {
 
     public void updateCredit() {
         creditLabel.setText("Your credit: " + myAgent.getCredit());
+    }
+
+    class MyRenderer extends DefaultListCellRenderer {
+        public Component getListCellRendererComponent(JList list,Object value,
+                                                      int index,boolean isSelected,boolean cellHasFocus)
+        {
+            JLabel lbl = (JLabel)super.getListCellRendererComponent(list,value,index,isSelected,cellHasFocus);
+            if(currentProviders.get(index).isPremium) lbl.setForeground(Color.RED);
+            else lbl.setForeground(Color.BLACK);
+            return lbl;
+        }
     }
 }
