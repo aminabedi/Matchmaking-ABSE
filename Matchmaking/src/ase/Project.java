@@ -16,6 +16,7 @@ public class Project {
     private AID provider;
     private AID customer;
     private String deadline;
+    private ProjectDetailGui projectDetailGui;
 
     public Project(String name, String description, int bid, AID provider, AID customer,String deadline) {
         this.name = name;
@@ -83,6 +84,9 @@ public class Project {
 
     public void chatUpdate(String chatMessage){
         messagesHistory.add(chatMessage);
+        if (projectDetailGui != null){
+            projectDetailGui.updateLabel(this.getName(), this.getDescription(), this.getProgress(), this.getMessagesHistory());
+        }
     }
 
     public int getBid() {
@@ -94,6 +98,10 @@ public class Project {
 
     public AID getCustomer() {
         return customer;
+    }
+
+    public void connectGUI(ProjectDetailGui projectDetailGui) {
+        this.projectDetailGui = projectDetailGui;
     }
 }
 

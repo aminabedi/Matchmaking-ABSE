@@ -1,5 +1,6 @@
 package ase;
 
+import com.sun.tools.javac.util.StringUtils;
 import jade.core.AID;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 public class CustomerGui {
 
@@ -28,8 +30,13 @@ public class CustomerGui {
     DefaultListModel<String> projectsListModel;
     JLabel creditLabel;
     List<Provider> currentProviders = new ArrayList<>();
+    CustomerAgent myAgent;
 
     public CustomerGui(CustomerAgent myAgent, Set<AID> providers, List<Project> projects) {
+        this.myAgent = myAgent;
+        System.out.println("number of providers: ");
+        System.out.println(providers.size());
+
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
         jFrame.setSize(1000, 600);
         this.projects = projects;
@@ -71,7 +78,12 @@ public class CustomerGui {
                 }
             }
         });
-        leftPanel.add(list, BorderLayout.SOUTH);
+
+        JPanel providerPanel = new JPanel();
+        providerPanel.setLayout(new BorderLayout());
+        providerPanel.add(new JLabel("Providers:"),BorderLayout.NORTH);
+        providerPanel.add(list,BorderLayout.CENTER);
+        leftPanel.add(providerPanel, BorderLayout.SOUTH);
 
         HintTextField searchTextField = new HintTextField("Search Provider");
         searchTextField.setSize(new Dimension(200, 24));
@@ -93,12 +105,12 @@ public class CustomerGui {
                 String searchedText = searchTextField.getText();
                 if (searchedText.isEmpty()) {
                     providersList.removeAllElements();
-                    for(Provider provider:currentProviders){
+                    for (Provider provider : currentProviders) {
                         providersList.addElement(provider.getInfo());
                     }
                 } else {
                     providersList.removeAllElements();
-                    List<Provider> searchedProviders = UserManagerAgent.searchProvider(searchedText,currentProviders);
+                    List<Provider> searchedProviders = UserManagerAgent.searchProvider(searchedText, currentProviders);
                     for (Provider provider : searchedProviders) {
                         providersList.addElement(provider.getInfo());
                     }
@@ -125,8 +137,11 @@ public class CustomerGui {
                 }
             }
         });
-
-        leftPanel.add(projectList, BorderLayout.CENTER);
+        JPanel projectPanel = new JPanel();
+        projectPanel.setLayout(new BorderLayout());
+        projectPanel.add(new JLabel("Projects"),BorderLayout.NORTH);
+        projectPanel.add(projectList, BorderLayout.CENTER);
+        leftPanel.add(projectPanel, BorderLayout.CENTER);
         jPanel.add(leftPanel, BorderLayout.WEST);
 
         JTextArea jTextAreaDescription = new JTextArea("Project Description");
@@ -175,7 +190,13 @@ public class CustomerGui {
                 myAgent.sendProposal(project, selectedProvider);
             }
         });
-//        JPanel jPanelNewMessage = new JPanel();
+
+        jPanelNewMessage.add(bid, BorderLayout.CENTER);
+        jPanelNewMessage.add(jButtonSend, BorderLayout.SOUTH);
+
+        creditLabel = new JLabel("Your credit: " + myAgent.getCredit());
+        jPanelNewMessage.add(creditLabel, BorderLayout.SOUTH);
+
         jPanelNewMessage.add(bid, BorderLayout.CENTER);
         jPanelNewMessage.add(jButtonSend, BorderLayout.SOUTH);
 
@@ -200,4 +221,7 @@ public class CustomerGui {
         projectsListModel.addElement(project.getName());
     }
 
+    public void updateCredit() {
+        creditLabel.setText("Your credit: " + myAgent.getCredit());
+    }
 }

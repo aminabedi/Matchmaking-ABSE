@@ -16,19 +16,14 @@ public class CustomerAgent extends EnhancedAgent {
     @Override
     protected void setup() {
         System.out.println("Hello! CustomerAgent " + getAID().getName() + " is here!");
-//        addSomeMockProjects();
         Set<AID> providers = searchForService("project-provide");
         projects = new ArrayList<>();
         gui = new CustomerGui(this, providers, projects);
         gui.showGui();
-        addBehaviour(new MessageHandlingBehaviour(this));
+//        addBehaviour(new MessageHandlingBehaviour(this));
         addBehaviour(new CyclicBehaviour() {
             public void action() {
                 ACLMessage msg, reply = null;
-//                MessageTemplate template;
-
-                //listening for project proposal
-//                template = MessageTemplate.MatchConversationId(Constants.PROJECT_REG);
 
                 msg = myAgent.receive();
 
@@ -52,7 +47,13 @@ public class CustomerAgent extends EnhancedAgent {
                         // TODO: Instead of this, corresponded projectGUI would be opened.
                     }
                     else if (msg.getConversationId() == Constants.CHAT){
-
+                        String projectName = msg.getContent().split(":")[0];
+                        String chatMessage = msg.getContent().split(":")[1];
+                        for (Project project : projects){
+                            if (project.getName().equals(projectName)){
+                                project.chatUpdate(chatMessage);
+                            }
+                        }
                     }
                 }
             }
@@ -69,13 +70,6 @@ public class CustomerAgent extends EnhancedAgent {
         message.addReceiver(provider);
         send(message);
     }
-
-//    private void addSomeMockProjects() {
-//        projects = new ArrayList<>();
-//        projects.add(new Project("Project 1", "Description 1", 10));
-//        projects.add(new Project("Project 2", "Description 2", 20));
-//        projects.add(new Project("Project 3", "Description 3", 30));
-//    }
 
     public void sendMessage(AID provider, String p, String projectName) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
@@ -94,10 +88,11 @@ public class CustomerAgent extends EnhancedAgent {
     }
     
     public void markProjectDone(Project project) {
+        System.out.println("MARKING DONE " + project.getProvider().getLocalName());
     	addCredit(-1 * project.getBid());
     	ACLMessage message = new ACLMessage(ACLMessage.CONFIRM);
         message.setConversationId(Constants.PAYMENT);
-        message.setContent(""+project.getBid());
+        message.setContent(""+70*project.getBid()/100);
         message.addReceiver(project.getProvider());
         send(message);
     }
@@ -105,6 +100,8 @@ public class CustomerAgent extends EnhancedAgent {
     	return credit;
     }
     public void addCredit(int x) {
-    	credit += x;
+        credit += x;
+        gui.updateCredit();
+    	
     }
 }
