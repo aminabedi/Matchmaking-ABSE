@@ -13,6 +13,8 @@ public class ProjectDetailGui {
 
     ProjectDetailGui(CustomerAgent agent, Project project) {
 
+        project.connectGUI(this);
+
         jFrame = new JFrame("Welcome " + agent.getLocalName());
         jFrame.setSize(400, 400);
 
@@ -32,16 +34,12 @@ public class ProjectDetailGui {
         jButtonSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                agent.send();
-//                Project project = new Project(jTextFieldMessage.getText(), jTextAreaDescription.getText(),
-//                        Integer.parseInt(bid.getText()));
+
                 String messageText = jTextFieldMessage.getText();
                 project.chatUpdate(messageText);
                 agent.sendMessage(project.getProvider(), messageText, project.getName());
                 updateLabel(project.getName(), project.getDescription(), project.getProgress(), project.getMessagesHistory());
 
-//                System.out.println(jTextFieldMessage.getText() + "  " + project.toString());
-//                myAgent.sendProposal(project, selectedProvider);
             }
         });
         JPanel southPanel = new JPanel();
@@ -59,7 +57,7 @@ public class ProjectDetailGui {
         this.jFrame.add(jPanel);
     }
 
-    private void updateLabel(String name, String description, int progress, ArrayList<String> messageHistory) {
+    public void updateLabel(String name, String description, int progress, ArrayList<String> messageHistory) {
         StringBuilder text = new StringBuilder("<html>");
         text.append("Name: ").append(name).append("<br/>");
         text.append("Description: ").append(description).append("<br/>");
@@ -105,6 +103,7 @@ public class ProjectDetailGui {
 
     ProjectDetailGui(ProviderAgent agent, Project project) {
 
+        project.connectGUI(this);
 
         jFrame = new JFrame("Welcome " + agent.getLocalName());
         jFrame.setSize(400, 400);
@@ -125,16 +124,10 @@ public class ProjectDetailGui {
         jButtonSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                agent.send();
-//                Project project = new Project(jTextFieldMessage.getText(), jTextAreaDescription.getText(),
-//                        Integer.parseInt(bid.getText()));
                 String messageText = jTextFieldMessage.getText();
                 project.chatUpdate(messageText);
-                agent.sendMessage(project.getProvider(), messageText, project.getName());
+                agent.sendMessage(project.getCustomer(), messageText, project.getName());
                 updateLabel(project.getName(), project.getDescription(), project.getProgress(), project.getMessagesHistory());
-
-//                System.out.println(jTextFieldMessage.getText() + "  " + project.toString());
-//                myAgent.sendProposal(project, selectedProvider);
             }
         });
         JPanel southPanel = new JPanel();

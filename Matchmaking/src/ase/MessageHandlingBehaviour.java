@@ -22,7 +22,7 @@ public class MessageHandlingBehaviour extends CyclicBehaviour{
             String content = msg.getContent();
             System.out.println("Received a chat message:" + content);
             reply = msg.createReply();
-            MessageGui msgGui = new MessageGui(myAgent, reply, content, false);
+            MessageGui msgGui = new MessageGui(myAgent, reply, msg, false);
             msgGui.showGui();
         }
 	}

@@ -26,6 +26,9 @@ public class CustomerGui {
     JLabel creditLabel;
 
     public CustomerGui(CustomerAgent myAgent, Set<AID> providers, List<Project> projects) {
+        System.out.println("number of providers: ");
+        System.out.println(providers.size());
+
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
         jFrame.setSize(1000, 400);
         this.projects = projects;
@@ -142,14 +145,14 @@ public class CustomerGui {
                 myAgent.sendProposal(project, selectedProvider);
             }
         });
-        JPanel jPanelNewMessage = new JPanel();
-        jPanelNewMessage.add(bid, BorderLayout.CENTER);
-        jPanelNewMessage.add(jButtonSend, BorderLayout.SOUTH);
+        JPanel jPanelNewMessage1 = new JPanel();
+        jPanelNewMessage1.add(bid, BorderLayout.CENTER);
+        jPanelNewMessage1.add(jButtonSend, BorderLayout.SOUTH);
 
         creditLabel = new JLabel("Your credit: "+ myAgent.getCredit());
-        jPanelNewMessage.add(creditLabel, BorderLayout.SOUTH);
+        jPanelNewMessage1.add(creditLabel, BorderLayout.SOUTH);
 
-        jPanel.add(jPanelNewMessage, BorderLayout.SOUTH);
+        jPanel.add(jPanelNewMessage1, BorderLayout.SOUTH);
 
         jFrame.add(jPanel);
     }
