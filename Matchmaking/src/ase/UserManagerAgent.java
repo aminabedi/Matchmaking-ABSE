@@ -8,25 +8,38 @@ import java.util.List;
 public class UserManagerAgent extends EnhancedAgent {
 
     UserGui userGui;
-    List<User> users = new ArrayList<>();
-    User currentUser;
+    static List<Provider> providers = new ArrayList<>();
+    static List<Customer> customers = new ArrayList<>();
 
     public UserManagerAgent() {
         addMockUsers();
     }
 
-    private void addMockUsers() {
-        users.add(new User("P1", "1", "provider", "Java"));
-        users.add(new User("P2", "2", "provider", "PHP"));
-        users.add(new User("P3", "3", "provider", "C"));
+    public static Provider getProvider(String name) {
+        for (Provider provider : providers) {
+            if (provider.getUsername().equals(name)) {
+                return provider;
+            }
+        }
+        return null;
+    }
 
-        users.add(new User("C1", "1", "customer", ""));
-        users.add(new User("C2", "2", "customer", ""));
-        users.add(new User("C3", "3", "customer", ""));
+    private void addMockUsers() {
+        providers.add(new Provider("P1", "1", "provider", "Java"));
+        providers.add(new Provider("P2", "2", "provider", "PHP"));
+        providers.add(new Provider("P3", "3", "provider", "C"));
+
+        customers.add(new Customer("C1", "1", "customer"));
+        customers.add(new Customer("C2", "2", "customer"));
+        customers.add(new Customer("C3", "3", "customer"));
     }
 
     public void registerUser(String userName, String password, String role, String skill) {
-        users.add(new User(userName, password, role, skill));
+        if (role.isEmpty()) {
+            customers.add(new Customer(userName, password, role));
+        } else {
+            providers.add(new Provider(userName, password, role, skill));
+        }
     }
 
     @Override
@@ -48,20 +61,23 @@ public class UserManagerAgent extends EnhancedAgent {
     }
 
     public void login(String userName, String password, String role) {
-        for (User user : users) {
-            if (user.getUsername().equals(userName) && user.getPassword().equals(password) && user.getRole().equals(role)) {
-                System.out.println("Login Successfully " + user.getRole() + ":" + User.PROVIDER);
-                switch (user.getRole()) {
-                    case User.CUSTOMER:
-                        createAgent("Customer:" + user.getUsername(), "ase.CustomerAgent");
-                        break;
-                    case User.PROVIDER:
-                        createAgent("Provider:" + user.getUsername(), "ase.ProviderAgent");
+        if (role.equals(User.CUSTOMER)) {
+            for (User user : customers) {
+                if (user.getUsername().equals(userName) && user.getPassword().equals(password)) {
+                    System.out.println("Login Successfully " + user.getRole());
+                    createAgent("Customer:" + user.getUsername(), "ase.CustomerAgent");
+                    return;
                 }
-                return;
+            }
+        } else {
+            for (User user : providers) {
+                if (user.getUsername().equals(userName) && user.getPassword().equals(password)) {
+                    System.out.println("Login Successfully " + user.getRole());
+                    createAgent("Provider:" + user.getUsername(), "ase.ProviderAgent");
+                    return;
+                }
             }
         }
         userGui.showWrongCredential();
     }
-
 }

@@ -23,7 +23,7 @@ public class CustomerGui {
 
     public CustomerGui(CustomerAgent myAgent, Set<AID> providers, List<Project> projects) {
         jFrame = new JFrame("Welcome " + myAgent.getLocalName());
-        jFrame.setSize(400, 400);
+        jFrame.setSize(700, 400);
         this.projects = projects;
 
         this.jFrame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -43,11 +43,18 @@ public class CustomerGui {
 
         providersList = new DefaultListModel<>();
         for (AID provider : providers) {
-            providersList.addElement(provider.getLocalName());
+            String text = "Name: ";
+            Provider currentProvider = UserManagerAgent.getProvider(provider.getLocalName().split(":")[1]);
+            text += currentProvider.getUsername() + ", ";
+            text += "Role: ";
+            text += currentProvider.getRole()+", ";
+            text+= "Skill: ";
+            text+=currentProvider.getSkill()+", ";
+            providersList.addElement(text);
         }
         JList<String> list = new JList<>(providersList);
         list.setFixedCellHeight(50);
-        list.setFixedCellWidth(100);
+        list.setFixedCellWidth(300);
 
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
