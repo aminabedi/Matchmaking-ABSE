@@ -1,6 +1,7 @@
 package ase;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,11 +21,17 @@ public class ProjectDetailGui {
 
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
-        JLabel jLabel = new JLabel();
+        JLabel jLabel = new JLabel("The next label");
+
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BorderLayout());
+        centerPanel.add(label, BorderLayout.NORTH);
+        centerPanel.add(jLabel, BorderLayout.CENTER);
+        jPanel.add(centerPanel,BorderLayout.CENTER);
+
 
         updateLabel(project.getName(), project.getDescription(), project.getProgress(), project.getMessagesHistory());
 
-        jPanel.add(label, BorderLayout.CENTER);
 
         JTextField jTextFieldMessage = new HintTextField("Message");
         jPanel.add(jTextFieldMessage, BorderLayout.NORTH);
