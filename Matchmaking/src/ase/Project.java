@@ -1,7 +1,7 @@
 package ase;
 
-import jade.lang.acl.ACLMessage;
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
 
@@ -15,9 +15,9 @@ public class Project {
     private AID customer;
     private String deadline;
     private ProjectDetailGui projectDetailGui;
-    private boolean done=false;
+    private boolean done = false;
 
-    public Project(String name, String description, int bid, AID provider, AID customer,String deadline) {
+    public Project(String name, String description, int bid, AID provider, AID customer, String deadline) {
         this.name = name;
         this.bid = bid;
         this.description = description;
@@ -26,9 +26,10 @@ public class Project {
         this.deadline = deadline;
     }
 
-    public void setDone(){
+    public void setDone() {
         done = true;
     }
+
     public void setName(String newName) {
         this.name = newName;
     }
@@ -47,61 +48,62 @@ public class Project {
     }
 
     public String getName() {
-        if(done){
+        if (done) {
             return "" + name + " (done)";
         }
         return this.name;
     }
-    
+
     public String getDescription() {
-    	return this.description;
+        return this.description;
     }
-    
-    
+
+
     public String toString() {
-        if(done){
+        if (done) {
             return "" + name + " (done)";
         }
-    	return "" + name + ":" + description + ":" + bid; 
+        return "" + name + ":" + description + ":" + bid + ":" + deadline;
     }
-    
+
     public String getContract() {
-    	return "Contract for project: " + toString();
+        return "Contract for project: " + toString();
     }
-    
+
     public String getRejectionMessage(AID sender) {
-    	return sender.getLocalName() + " has rejected " + toString();
+        return sender.getLocalName() + " has rejected " + toString();
     }
-    
+
 
     public boolean isFinal() {
         return progress == 100;
     }
 
-    public int getProgress(){
+    public int getProgress() {
         return progress;
     }
 
-    public void progress(int progressPercentage){
+    public void progress(int progressPercentage) {
         int permittedProgress = 100 - this.progress;
-        if (progressPercentage < permittedProgress){
+        if (progressPercentage < permittedProgress) {
             progress += progressPercentage;
         }
-        if (projectDetailGui != null){
+        if (projectDetailGui != null) {
             projectDetailGui.updateRightLabel(this.getName(), this.getDescription(), this.getProgress(), this.getMessagesHistory());
         }
     }
 
-    public void chatUpdate(String chatMessage){
+    public void chatUpdate(String chatMessage) {
         messagesHistory.add(chatMessage);
-        if (projectDetailGui != null){
+        if (projectDetailGui != null) {
             projectDetailGui.updateRightLabel(this.getName(), this.getDescription(), this.getProgress(), this.getMessagesHistory());
         }
     }
 
     public int getBid() {
-    	return bid;
+        return bid;
     }
+
     public AID getProvider() {
         return provider;
     }

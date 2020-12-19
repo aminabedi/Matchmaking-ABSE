@@ -31,7 +31,14 @@ public class MessageGui {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
 
-        JLabel jLabel = new JLabel("<html>" + content.replaceAll("\n", "<br>") + "</html>");
+        JLabel jLabel = new JLabel();
+        String[] text = content.split(":");
+        String output = "<HTML>";
+        for(String string : text){
+            output+=" "+string+"<br/>";
+        }
+        output+="</HTML>";
+        jLabel.setText(output);
         jLabel.setSize(new Dimension(20, 20));
         jPanel.add(jLabel, BorderLayout.CENTER);
         
