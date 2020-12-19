@@ -226,6 +226,14 @@ public class CustomerGui {
     public void updateCredit() {
         creditLabel.setText("Your credit: " + myAgent.getCredit());
     }
+    public void updateProjects(List<Project> projects){
+        System.out.println("UPDATING PROJECTS");
+        this.projects = projects;
+        projectsListModel.clear();
+        for (Project project : this.projects) {
+            projectsListModel.addElement(project.getName());
+        }
+    }
 
     class MyRenderer extends DefaultListCellRenderer {
         public Component getListCellRendererComponent(JList list,Object value,

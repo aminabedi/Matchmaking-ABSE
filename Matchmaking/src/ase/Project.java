@@ -17,6 +17,7 @@ public class Project {
     private AID customer;
     private String deadline;
     private ProjectDetailGui projectDetailGui;
+    private boolean done=false;
 
     public Project(String name, String description, int bid, AID provider, AID customer,String deadline) {
         this.name = name;
@@ -27,7 +28,9 @@ public class Project {
         this.deadline = deadline;
     }
 
-
+    public void setDone(){
+        done = true;
+    }
     public void setName(String newName) {
         this.name = newName;
     }
@@ -46,6 +49,9 @@ public class Project {
     }
 
     public String getName() {
+        if(done){
+            return "" + name + " (done)";
+        }
         return this.name;
     }
     
@@ -55,6 +61,9 @@ public class Project {
     
     
     public String toString() {
+        if(done){
+            return "" + name + " (done)";
+        }
     	return "" + name + ":" + description + ":" + bid; 
     }
     

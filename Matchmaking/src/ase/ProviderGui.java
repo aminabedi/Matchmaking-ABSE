@@ -57,7 +57,14 @@ public class ProviderGui {
             });
             jPanelNewMessage.add(premiumButton, BorderLayout.SOUTH);
         }
-
+        JButton withdrawButton = new JButton("Witdraw service agreement");
+        withdrawButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                myAgent.withdraw();     
+            }
+        });
+        jPanelNewMessage.add(withdrawButton, BorderLayout.SOUTH);
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
         leftPanel.setSize(100, 400);

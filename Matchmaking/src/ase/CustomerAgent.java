@@ -89,6 +89,14 @@ public class CustomerAgent extends EnhancedAgent {
     
     public void markProjectDone(Project project) {
         System.out.println("MARKING DONE " + project.getProvider().getLocalName());
+        project.setDone();
+        for(Project p: projects){
+            if(p.getName().equals(project.getName())){
+                System.out.println("FOUND DONE PROJECT");
+                p.setDone();
+            }
+        }
+        gui.updateProjects(projects);
     	addCredit(-1 * project.getBid());
     	ACLMessage message = new ACLMessage(ACLMessage.CONFIRM);
         message.setConversationId(Constants.PAYMENT);

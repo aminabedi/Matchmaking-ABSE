@@ -124,6 +124,13 @@ public class ProviderAgent extends EnhancedAgent {
         p.setPremium();
         providerGui.updatePremium();
         return true;
-        
+    }
+    public void withdraw(){
+        Provider p = getProvider();
+        p.setRole(User.PROVIDER);
+        providerGui.dispose();
+        createAgent("Customer:" + p.getUsername(), "ase.CustomerAgent");
+        takeDown();
     }
 }
+
