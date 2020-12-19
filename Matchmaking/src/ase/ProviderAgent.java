@@ -27,9 +27,9 @@ public class ProviderAgent extends EnhancedAgent {
 
     }
 
-    public void sendMessage(AID customer, String messageText, String projectName) {
+    public void sendMessage(AID customer, String messageText, String projectName, String conversationId) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-        message.setConversationId(Constants.CHAT);
+        message.setConversationId(conversationId);
         message.setContent(projectName + ":" + messageText);
         message.addReceiver(customer);
         send(message);
@@ -69,30 +69,31 @@ public class ProviderAgent extends EnhancedAgent {
                         }
                     }
                 }
-                else if (msg.getConversationId() == Constants.RATE)
-                {
-                    int rate = Integer.parseInt(msg.getContent());
-                    ratings.add(rate);
-                    update_rate_and_name();
-
-                }
                 else if (msg.getConversationId() == Constants.PAYMENT)
                 {
                     System.out.println("Recieving payment "+ msg.getContent());
                     int bid = Integer.parseInt(msg.getContent());
                     myAgent.addCredit(bid);
                 }
+                else if (msg.getConversationId() == Constants.DONE)
+                {
+                    System.out.println("Done");
+                    String projectName = msg.getContent().split(":")[0];
+                    String chatMessage = msg.getContent().split(":")[1];
+                    for (Project project : projects){
+                        if (project.getName().equals(projectName)){
+                            project.disposeGUI();
+                        }
+                    }
+//                    ratings.add(Integer.parseInt(chatMessage));
+//                    update_rate();
+                }
             }
-            
-            
-//            else {
-//                block();
-//            }
         }
 
     }
 
-    private void update_rate_and_name() {
+    private void update_rate() {
         Integer sum = 0;
         if(!ratings.isEmpty()) {
             for (Integer mark : ratings) {
@@ -101,8 +102,8 @@ public class ProviderAgent extends EnhancedAgent {
             rate = sum.doubleValue() / ratings.size();
         }
         rate = sum;
-        getAID().setLocalName(getLocalName().split("\\(")[0] + Double.toString(rate));
-        System.out.println("changed rate");
+        System.out.println("changed rate to : ");
+        System.out.println(rate);
     }
 
     public int getCredit() {

@@ -2,10 +2,8 @@ package ase;
 
 import jade.lang.acl.ACLMessage;
 import jade.core.AID;
-import jade.tools.sniffer.Message;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Project {
     private String name;
@@ -89,12 +87,15 @@ public class Project {
         if (progressPercentage < permittedProgress){
             progress += progressPercentage;
         }
+        if (projectDetailGui != null){
+            projectDetailGui.updateRightLabel(this.getName(), this.getDescription(), this.getProgress(), this.getMessagesHistory());
+        }
     }
 
     public void chatUpdate(String chatMessage){
         messagesHistory.add(chatMessage);
         if (projectDetailGui != null){
-            projectDetailGui.updateLabel(this.getName(), this.getDescription(), this.getProgress(), this.getMessagesHistory());
+            projectDetailGui.updateRightLabel(this.getName(), this.getDescription(), this.getProgress(), this.getMessagesHistory());
         }
     }
 
@@ -111,6 +112,10 @@ public class Project {
 
     public void connectGUI(ProjectDetailGui projectDetailGui) {
         this.projectDetailGui = projectDetailGui;
+    }
+
+    public void disposeGUI() {
+        this.projectDetailGui.disposeGUI();
     }
 }
 

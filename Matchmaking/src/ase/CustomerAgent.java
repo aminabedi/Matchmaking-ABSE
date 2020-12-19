@@ -55,6 +55,16 @@ public class CustomerAgent extends EnhancedAgent {
                             }
                         }
                     }
+                    else if (msg.getConversationId() == Constants.PROGRESS){
+                        String projectName = msg.getContent().split(":")[0];
+                        String progressText = msg.getContent().split(":")[1];
+                        int progress = Integer.parseInt(progressText);
+                        for (Project project : projects){
+                            if (project.getName().equals(projectName)){
+                                project.progress(progress);
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -71,9 +81,9 @@ public class CustomerAgent extends EnhancedAgent {
         send(message);
     }
 
-    public void sendMessage(AID provider, String p, String projectName) {
+    public void sendMessage(AID provider, String p, String projectName, String conversationId) {
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-        message.setConversationId(Constants.CHAT);
+        message.setConversationId(conversationId);
         message.setContent(projectName + ":" + p);
         message.addReceiver(provider);
         send(message);
