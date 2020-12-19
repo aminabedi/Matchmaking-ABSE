@@ -118,4 +118,12 @@ public class ProviderGui {
         premiumLabel.setText("You are" + (myAgent.getProvider().isPremium?" ":" not ")+ "a premium user");
     }
 
+    public void updateProjects(List<Project> projects){
+        System.out.println("UPDATING PROJECTS");
+        this.projects = projects;
+        projectsListModel.clear();
+        for (Project project : this.projects) {
+            projectsListModel.addElement(project.getName());
+        }
+    }
 }

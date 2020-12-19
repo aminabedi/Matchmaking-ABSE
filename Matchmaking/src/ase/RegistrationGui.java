@@ -68,6 +68,7 @@ public class RegistrationGui {
                 }
                 userManagerAgent.registerUser(textField_userName.getText(), textField_password.getText(), comboBox_userType.getSelectedItem().toString(), comboBox_skills.getSelectedItem().toString());
                 System.out.println("User: " + textField_userName.getText() + " is registered successfully");
+                dispose();
             }
         });
 
