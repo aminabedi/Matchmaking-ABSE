@@ -99,6 +99,12 @@ public class CustomerAgent extends EnhancedAgent {
     
     public void markProjectDone(Project project) {
         System.out.println("MARKING DONE " + project.getProvider().getLocalName());
+        
+    	ACLMessage message = new ACLMessage(ACLMessage.CONFIRM);
+        message.setConversationId(Constants.PAYMENT);
+        message.setContent(project.getName()+":"+70*project.getBid()/100);
+        message.addReceiver(project.getProvider());
+        send(message);
         project.setDone();
         for(Project p: projects){
             if(p.getName().equals(project.getName())){
@@ -108,11 +114,6 @@ public class CustomerAgent extends EnhancedAgent {
         }
         gui.updateProjects(projects);
     	addCredit(-1 * project.getBid());
-    	ACLMessage message = new ACLMessage(ACLMessage.CONFIRM);
-        message.setConversationId(Constants.PAYMENT);
-        message.setContent(""+70*project.getBid()/100);
-        message.addReceiver(project.getProvider());
-        send(message);
     }
     public int getCredit() {
     	return credit;

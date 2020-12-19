@@ -117,7 +117,9 @@ public class Project {
     }
 
     public void disposeGUI() {
-        this.projectDetailGui.disposeGUI();
+        if(this.projectDetailGui!=null){
+            this.projectDetailGui.disposeGUI();
+        }
     }
 }
 

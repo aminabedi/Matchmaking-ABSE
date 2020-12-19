@@ -72,7 +72,15 @@ public class ProviderAgent extends EnhancedAgent {
                 else if (msg.getConversationId() == Constants.PAYMENT)
                 {
                     System.out.println("Recieving payment "+ msg.getContent());
-                    int bid = Integer.parseInt(msg.getContent());
+                    String contents[] = msg.getContent().split(":");
+                    for(Project p: projects){
+                        if(p.getName().equals(contents[0])){
+                            System.out.println("FOUND DONE PROJECT");
+                            p.setDone();
+                        }
+                    }
+                    providerGui.updateProjects(projects);
+                    int bid = Integer.parseInt(contents[1]);
                     myAgent.addCredit(bid);
                 }
                 else if (msg.getConversationId() == Constants.DONE)
